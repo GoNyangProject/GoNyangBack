@@ -1,3 +1,51 @@
+# 공통
+spring:
+  output:
+    ansi:
+      enabled: always
+  application:
+    name: tossBack
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
+
+logging:
+  file:
+    path: ./logs
+
+# security 관련
+secret-key: 33D3AFA30260B16223DB5995202F35B1AFDB14B2FB8AE60D7CF79CD402F52D0769742896041858C6C9D632E2346E48CC98ECDE7B2E31B1F8624C223B6BFC15DD
+access-expiration-hours: 1
+refresh-expiration-hours: 240
+
+--- # 운영
+spring:
+  config:
+    activate:
+      on-profile: product
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://${MARIA_HOST:maria-db}:${MARIA_PORT:3306}/goNyangProject?allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password: WB12345!@
+  jpa:
+    generate-ddl: true
+    show-sql: true
+    defer-datasource-initialization: false
+    properties:
+      hibernate:
+        ddl-auto: update
+        format_sql: true
+        dialect: org.hibernate.dialect.MariaDBDialect
+    open-in-view: false
+logging:
+  level:
+    root: info
+
+--- # 로컬
 spring:
   config:
     activate:
@@ -10,11 +58,11 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: true
         format_sql: true
 logging:
   level:
-    org.hibernate.SQL: debug
+    root: debug
