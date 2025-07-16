@@ -1,9 +1,21 @@
 package com.example.tossback.common.constant;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ErrorCode {
-    public static final String NO_ERROR = "0000";
+@Getter
+public enum ErrorCode {
+
+    NO_ERROR("0000", "요청 성공", HttpStatus.OK);
+
+    private final String code;
+    private final String message;
+    private final HttpStatus httpStatus;
+
+    private ErrorCode(String code, String message, HttpStatus httpStatus) {
+        this.code = code;
+        this.message = message;
+        this.httpStatus = httpStatus;
+    }
+
 }
