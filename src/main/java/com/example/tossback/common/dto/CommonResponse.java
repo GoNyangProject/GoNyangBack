@@ -11,7 +11,7 @@ import lombok.Setter;
 public class CommonResponse {
 
     String errorCode = ErrorCode.NO_ERROR.getCode();
-    String errorMessage = ErrorCode.NO_ERROR.getMessage();
+    String message = ErrorCode.NO_ERROR.getMessage();
     Object result;
 
     public CommonResponse(Object result) {
@@ -20,7 +20,7 @@ public class CommonResponse {
 
     public CommonResponse(String errorCode, String errorMessage, Object result) {
         this.errorCode = errorCode;
-        this.errorMessage = errorMessage;
+        this.message = errorMessage;
         this.result = result;
     }
 }
