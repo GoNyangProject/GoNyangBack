@@ -1,4 +1,4 @@
-package com.example.tossback.common.constant;
+package com.example.tossback.common.enums;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

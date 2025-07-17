@@ -1,6 +1,6 @@
 package com.example.tossback.common.exception;
 
-import com.example.tossback.common.constant.ErrorCode;
+import com.example.tossback.common.enums.ErrorCode;
 import com.example.tossback.common.dto.CommonResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
