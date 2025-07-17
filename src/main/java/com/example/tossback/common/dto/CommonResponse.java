@@ -1,6 +1,6 @@
 package com.example.tossback.common.dto;
 
-import com.example.tossback.common.constant.ErrorCode;
+import com.example.tossback.common.enums.ErrorCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
