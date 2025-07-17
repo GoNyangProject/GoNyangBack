@@ -29,15 +29,16 @@ public class JWTFilter extends OncePerRequestFilter {
 
         String authorizationHeader = request.getHeader("Authorization");
 
-        if(authorizationHeader == null && !authorizationHeader.startsWith("Bearer ")) {
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            log.info("token null");
             filterChain.doFilter(request, response);
             return;
         }
 
         String token = authorizationHeader.replace("Bearer ", "");
 
-        if(jwtUtil.isExpired(token)) {
-            log.info("token exipred");
+        if (jwtUtil.isExpired(token)) {
+            log.info("token expired");
             filterChain.doFilter(request, response);
             return;
         }
