@@ -40,6 +40,9 @@ public class CustomMemberDetails implements UserDetails {
         return member.getUsername();
     }
 
+    public String getUserId() {return member.getUserId();}
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

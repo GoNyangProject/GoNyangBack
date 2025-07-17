@@ -1,7 +1,9 @@
 package com.example.tossback.config.jwt.util;
 
 
-import io.jsonwebtoken.Jwts;
+import com.example.tossback.common.enums.JwtTokenType;
+import io.jsonwebtoken.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -10,6 +12,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
+@Slf4j
 @Component
 public class JWTUtil {
 
@@ -25,8 +28,8 @@ public class JWTUtil {
         this.secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
     }
 
-    public String getUsername(String token) {
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("username", String.class);
+    public String getUserId(String token) {
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("userId", String.class);
     }
 
     public String getRole(String token) {
@@ -37,19 +40,41 @@ public class JWTUtil {
     public Boolean isExpired(String token) {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
     }
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parser()
+                    .setSigningKey(secretKey)
+                    .build()
+                    .parseClaimsJws(token);
 
-    public String createJwt(String username, String role){
+            return true;
+        } catch (ExpiredJwtException e) {
+            log.warn("JWT 만료됨", e);
+        } catch (JwtException e) {
+            log.warn("유효하지 않은 JWT", e);
+        }
+
+        return false;
+    }
+    public String createToken(String userId, String role, JwtTokenType type) {
         long currentTimeMillis = System.currentTimeMillis();
-        long expirationTimeMillis = currentTimeMillis + (accessExpirationHours * 60 * 60 * 1000L);
+        long expirationTimeMillis = currentTimeMillis +
+                (type == JwtTokenType.ACCESS
+                        ? accessExpirationHours
+                        : refreshExpirationHours) * 60 * 60 * 1000L;
 
-        return Jwts.builder()
-                .claim("username", username)
-                .claim("role", role)
+        JwtBuilder builder = Jwts.builder()
+                .claim("userId", userId)
                 .issuedAt(new Date(currentTimeMillis))
                 .expiration(new Date(expirationTimeMillis))
-                .signWith(secretKey)
-                .compact();
+                .signWith(secretKey);
 
+        // Access 토큰일 경우에만 role 포함
+        if (type == JwtTokenType.ACCESS) {
+            builder.claim("role", role);
+        }
+
+        return builder.compact();
     }
 
 }

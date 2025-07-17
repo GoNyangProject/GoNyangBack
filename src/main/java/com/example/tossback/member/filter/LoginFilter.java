@@ -1,8 +1,10 @@
 package com.example.tossback.member.filter;
 
 import com.example.tossback.common.enums.ErrorCode;
+import com.example.tossback.common.enums.JwtTokenType;
 import com.example.tossback.common.exception.CommonException;
 import com.example.tossback.config.jwt.util.JWTUtil;
+import com.example.tossback.config.redis.util.RedisUtil;
 import com.example.tossback.member.dto.CustomMemberDetails;
 import com.example.tossback.member.dto.MemberDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,13 +25,18 @@ import java.util.Iterator;
 
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
+    private final Long refreshExpirationHours;
+
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
+    private final RedisUtil redisUtil;
 
-    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
+    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, RedisUtil redisUtil, Long refreshExpirationHours) {
+        this.refreshExpirationHours = refreshExpirationHours;
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
 //        this.setFilterProcessesUrl("/**");
+        this.redisUtil = redisUtil;
     }
 
     @Override
@@ -39,10 +46,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             ObjectMapper om = new ObjectMapper();
             MemberDTO loginRequest = om.readValue(request.getInputStream(), MemberDTO.class);
 
-            String username = loginRequest.getUsername();
+            String userId = loginRequest.getUserId();
             String password = loginRequest.getPassword();
 
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userId, password);
             return authenticationManager.authenticate(authToken);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -54,16 +61,25 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         CustomMemberDetails memberDetails = (CustomMemberDetails) authentication.getPrincipal();
 
-        String username = memberDetails.getUsername();
+//        String username = memberDetails.getUsername();
+        String userId = memberDetails.getUserId();
 //        String role = "ROLE_ADMIN";
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
         GrantedAuthority auth = iterator.next();
 
         String role = auth.getAuthority();
-        String token = jwtUtil.createJwt(username, role);
+//        String token = jwtUtil.createJwt(username, role);
+        String accessToken = jwtUtil.createToken(userId, role, JwtTokenType.ACCESS);
+        String refreshToken = jwtUtil.createToken(userId, null, JwtTokenType.REFRESH);
 
-        response.addHeader("Authorization", "Bearer " + token);
+        long refreshExpirationSeconds = refreshExpirationHours * 60 * 60;  // hours -> seconds
+        redisUtil.setDataExpire("refreshToken:" + userId, refreshToken, refreshExpirationSeconds);
+
+        response.addHeader("Authorization", "Bearer " + accessToken);
+        response.addHeader("Refresh-Token", refreshToken);
+
+//        response.addHeader("Authorization", "Bearer " + token);
 
     }
 
