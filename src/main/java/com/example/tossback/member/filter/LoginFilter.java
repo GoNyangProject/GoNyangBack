@@ -2,7 +2,7 @@ package com.example.tossback.member.filter;
 
 import com.example.tossback.common.enums.ErrorCode;
 import com.example.tossback.common.exception.CommonException;
-import com.example.tossback.config.jwt.JWTUtil;
+import com.example.tossback.config.jwt.util.JWTUtil;
 import com.example.tossback.member.dto.CustomMemberDetails;
 import com.example.tossback.member.dto.MemberDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,7 +29,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
-        this.setFilterProcessesUrl("/**");
+//        this.setFilterProcessesUrl("/**");
     }
 
     @Override

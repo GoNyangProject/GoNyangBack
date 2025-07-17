@@ -1,6 +1,6 @@
 package com.example.tossback.config.security;
 
-import com.example.tossback.config.jwt.JWTUtil;
+import com.example.tossback.config.jwt.util.JWTUtil;
 import com.example.tossback.config.jwt.filter.JWTFilter;
 import com.example.tossback.member.filter.LoginFilter;
 import org.springframework.context.annotation.Bean;

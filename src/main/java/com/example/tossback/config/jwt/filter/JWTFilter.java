@@ -1,6 +1,6 @@
 package com.example.tossback.config.jwt.filter;
 
-import com.example.tossback.config.jwt.JWTUtil;
+import com.example.tossback.config.jwt.util.JWTUtil;
 import com.example.tossback.member.dto.CustomMemberDetails;
 import com.example.tossback.member.entity.Member;
 import jakarta.servlet.FilterChain;

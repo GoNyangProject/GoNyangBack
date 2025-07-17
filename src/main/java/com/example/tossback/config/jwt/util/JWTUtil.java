@@ -1,4 +1,4 @@
-package com.example.tossback.config.jwt;
+package com.example.tossback.config.jwt.util;
 
 
 import io.jsonwebtoken.Jwts;
