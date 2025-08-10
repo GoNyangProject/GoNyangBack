@@ -35,7 +35,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         this.refreshExpirationHours = refreshExpirationHours;
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
-//        this.setFilterProcessesUrl("/**");
+        this.setFilterProcessesUrl("/member/login");
         this.redisUtil = redisUtil;
     }
 
@@ -63,7 +63,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
 //        String username = memberDetails.getUsername();
         String userId = memberDetails.getUserId();
-//        String role = "ROLE_ADMIN";
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
         GrantedAuthority auth = iterator.next();
@@ -79,9 +78,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         response.addHeader("Authorization", "Bearer " + accessToken);
         response.addHeader("Refresh-Token", refreshToken);
-
-//        response.addHeader("Authorization", "Bearer " + token);
-
     }
 
     @Override
