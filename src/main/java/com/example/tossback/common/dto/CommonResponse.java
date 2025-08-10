@@ -8,19 +8,23 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CommonResponse {
-
-    String errorCode = ErrorCode.NO_ERROR.getCode();
-    String message = ErrorCode.NO_ERROR.getMessage();
-    Object result;
+public final class CommonResponse {
+    private String code = ErrorCode.NO_ERROR.getCode();
+    private String message = "요청 성공";
+    private Object result;
 
     public CommonResponse(Object result) {
         this.result = result;
     }
 
-    public CommonResponse(String errorCode, String errorMessage, Object result) {
-        this.errorCode = errorCode;
-        this.message = errorMessage;
+    public CommonResponse(String message, Object result) {
+        this.message = message;
+        this.result = result;
+    }
+
+    public CommonResponse(String code, String message, Object result) {
+        this.code = code;
+        this.message = message;
         this.result = result;
     }
 }

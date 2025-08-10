@@ -13,4 +13,12 @@ public class MemberDTO {
 
     private String password;
 
+    private String email;
+
+    private Long phoneNumber;
+
+    private String gender;
+
+    private Long birth;
+
 }
