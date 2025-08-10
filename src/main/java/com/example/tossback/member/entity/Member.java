@@ -1,7 +1,7 @@
 package com.example.tossback.member.entity;
 
 import com.example.tossback.common.entity.BaseEntity;
-import com.example.tossback.enums.UserRoleType;
+import com.example.tossback.common.enums.UserRoleType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
