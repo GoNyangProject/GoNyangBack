@@ -17,7 +17,7 @@ public class MemberDTO {
 
     private Long phoneNumber;
 
-    private String gender;
+    private Character gender;
 
     private Long birth;
 

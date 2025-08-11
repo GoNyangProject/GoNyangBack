@@ -20,7 +20,7 @@ public class Member extends BaseEntity {
     private String email;
     private Long phoneNumber;
     private Long birth;
-    private String gender;
+    private Character gender;
     @Enumerated(EnumType.STRING)
     private UserRoleType userRoleType = UserRoleType.USER;
 }
