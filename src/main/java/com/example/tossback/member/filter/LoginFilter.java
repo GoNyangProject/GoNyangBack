@@ -22,6 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -81,8 +82,25 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     }
 
     @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
-        throw new CommonException("로그인 실패 : " + failed, ErrorCode.Unauthorized);
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
+//        throw new CommonException("로그인 실패 : " + failed, ErrorCode.Unauthorized);
+        CommonException exception = new CommonException(
+                "로그인 실패 : " + failed.getMessage(),
+                ErrorCode.Unauthorized // Unauthorized("0401", "ID 혹은 비밀번호가 일치하지 않습니다.", HttpStatus.UNAUTHORIZED)
+        );
+        response.setStatus(exception.getErrorCode().getHttpStatus().value());
+        response.setContentType("application/json;charset=UTF-8");
+
+        // JSON 응답
+        response.getWriter().write(
+                new ObjectMapper().writeValueAsString(
+                        Map.of(
+                                "type", "FAIL",
+                                "errorCode", exception.getErrorCode().getCode(), // "0401"
+                                "message", exception.getMessage()
+                        )
+                )
+        );
     }
 
 }
