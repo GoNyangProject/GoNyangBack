@@ -22,5 +22,5 @@ public class Member extends BaseEntity {
     private Long birth;
     private Character gender;
     @Enumerated(EnumType.STRING)
-    private UserRoleType userRoleType = UserRoleType.USER;
+    private UserRoleType userRoleType = UserRoleType.ROLE_USER;
 }

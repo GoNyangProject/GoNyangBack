@@ -1,5 +1,6 @@
 package com.example.tossback.member.filter;
 
+import com.example.tossback.common.dto.CommonResponse;
 import com.example.tossback.common.enums.ErrorCode;
 import com.example.tossback.common.enums.JwtTokenType;
 import com.example.tossback.common.exception.CommonException;
@@ -7,6 +8,7 @@ import com.example.tossback.config.jwt.util.JWTUtil;
 import com.example.tossback.config.redis.util.RedisUtil;
 import com.example.tossback.member.dto.CustomMemberDetails;
 import com.example.tossback.member.dto.MemberDTO;
+import com.example.tossback.member.dto.MemberResponseDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -68,8 +70,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
         GrantedAuthority auth = iterator.next();
 
-//        String role = auth.getAuthority();
-        String role = "ROLE_ADMIN";
+        String role = auth.getAuthority();
+//        String role = "ROLE_ADMIN";
 //        String token = jwtUtil.createJwt(username, role);
         String accessToken = jwtUtil.createToken(userId, role, JwtTokenType.ACCESS);
         String refreshToken = jwtUtil.createToken(userId, null, JwtTokenType.REFRESH);
@@ -79,6 +81,13 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         response.addHeader("Authorization", "Bearer " + accessToken);
         response.addHeader("Refresh-Token", refreshToken);
+
+        MemberResponseDTO userData = new MemberResponseDTO();
+        userData.setUserId(userId);
+        CommonResponse result = new CommonResponse(userData);
+        ObjectMapper mapper = new ObjectMapper();
+        response.getWriter().write(mapper.writeValueAsString(result));
+        response.getWriter().flush();
     }
 
     @Override
