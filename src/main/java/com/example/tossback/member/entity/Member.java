@@ -1,10 +1,14 @@
 package com.example.tossback.member.entity;
 
+import com.example.tossback.book.entity.Book;
 import com.example.tossback.common.entity.BaseEntity;
 import com.example.tossback.common.enums.UserRoleType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -18,9 +22,12 @@ public class Member extends BaseEntity {
     private String username;
     private String password;
     private String email;
-    private Long phoneNumber;
+    private String phoneNumber;
     private Long birth;
     private Character gender;
     @Enumerated(EnumType.STRING)
     private UserRoleType userRoleType = UserRoleType.ROLE_USER;
+
+    @OneToMany(mappedBy = "member")
+    private List<Book> books = new ArrayList<>();
 }

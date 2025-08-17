@@ -65,6 +65,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         CustomMemberDetails memberDetails = (CustomMemberDetails) authentication.getPrincipal();
 
 //        String username = memberDetails.getUsername();
+        Long memberId = memberDetails.getMemberId();
         String userId = memberDetails.getUserId();
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
@@ -83,6 +84,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         response.addHeader("Refresh-Token", refreshToken);
 
         MemberResponseDTO userData = new MemberResponseDTO();
+        userData.setMemberId(memberId);
         userData.setUserId(userId);
         CommonResponse result = new CommonResponse(userData);
         ObjectMapper mapper = new ObjectMapper();

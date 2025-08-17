@@ -30,6 +30,10 @@ public class CustomMemberDetails implements UserDetails {
         return collection;
     }
 
+    public long getMemberId() {
+        return member.getId();
+    }
+
     @Override
     public String getPassword() {
         return member.getPassword();
