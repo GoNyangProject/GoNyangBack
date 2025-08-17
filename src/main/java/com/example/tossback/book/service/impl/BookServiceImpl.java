@@ -20,8 +20,10 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookResponse> getBookData(long memberId) {
+
         List<Book> books = bookRepository.findAllByMemberId(memberId);
         List<BookResponse> bookResponses = new ArrayList<>();
+
         for (Book book : books) {
             BookResponse bookResponse = new BookResponse();
             bookResponse.setUsername(book.getMember().getUsername());
