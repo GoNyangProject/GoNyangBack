@@ -1,8 +1,6 @@
 package com.example.tossback.book.dto;
 
-import com.example.tossback.book.entity.Book;
-import com.example.tossback.book.entity.Menu;
-import com.example.tossback.member.entity.Member;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +13,7 @@ public class BookResponse {
     private String username;
     private String menuName;
     private String content;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime bookDate;
 
 }
