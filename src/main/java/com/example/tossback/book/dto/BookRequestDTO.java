@@ -7,6 +7,6 @@ import lombok.Setter;
 @Setter
 public class BookRequestDTO {
 
-    private long memberId;
+    private String uuid;
 
 }

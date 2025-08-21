@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class BookResponse {
-
+    private String uuid;
     private String username;
     private String menuName;
     private String content;

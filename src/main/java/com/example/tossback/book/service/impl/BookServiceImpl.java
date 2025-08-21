@@ -26,6 +26,7 @@ public class BookServiceImpl implements BookService {
 
         for (Book book : books) {
             BookResponse bookResponse = new BookResponse();
+            bookResponse.setUuid(book.getUuid());
             bookResponse.setUsername(book.getMember().getUsername());
             bookResponse.setMenuName(book.getMenu().getName());
             bookResponse.setContent(book.getMenu().getContent());
@@ -34,4 +35,5 @@ public class BookServiceImpl implements BookService {
         }
         return bookResponses;
     }
+
 }
