@@ -32,7 +32,7 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private UserRoleType userRoleType = UserRoleType.ROLE_USER;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Book> books = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
