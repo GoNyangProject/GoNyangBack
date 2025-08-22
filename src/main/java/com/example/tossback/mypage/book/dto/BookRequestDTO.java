@@ -1,4 +1,4 @@
-package com.example.tossback.book.dto;
+package com.example.tossback.mypage.book.dto;
 
 import lombok.Getter;
 import lombok.Setter;

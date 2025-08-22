@@ -1,4 +1,4 @@
-package com.example.tossback.book.entity;
+package com.example.tossback.mypage.book.entity;
 
 import com.example.tossback.common.entity.BaseEntity;
 import com.example.tossback.member.entity.Member;

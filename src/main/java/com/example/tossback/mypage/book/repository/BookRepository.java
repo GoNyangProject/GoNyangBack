@@ -1,6 +1,6 @@
-package com.example.tossback.book.repository;
+package com.example.tossback.mypage.book.repository;
 
-import com.example.tossback.book.entity.Book;
+import com.example.tossback.mypage.book.entity.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -1,9 +1,9 @@
-package com.example.tossback.book.service.impl;
+package com.example.tossback.mypage.book.service.impl;
 
-import com.example.tossback.book.dto.BookResponse;
-import com.example.tossback.book.entity.Book;
-import com.example.tossback.book.repository.BookRepository;
-import com.example.tossback.book.service.BookService;
+import com.example.tossback.mypage.book.dto.BookResponse;
+import com.example.tossback.mypage.book.entity.Book;
+import com.example.tossback.mypage.book.repository.BookRepository;
+import com.example.tossback.mypage.book.service.BookService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

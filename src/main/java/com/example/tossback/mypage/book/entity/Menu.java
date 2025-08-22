@@ -1,4 +1,4 @@
-package com.example.tossback.book.entity;
+package com.example.tossback.mypage.book.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

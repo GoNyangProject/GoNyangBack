@@ -1,6 +1,6 @@
-package com.example.tossback.book.service;
+package com.example.tossback.mypage.book.service;
 
-import com.example.tossback.book.dto.BookResponse;
+import com.example.tossback.mypage.book.dto.BookResponse;
 
 import java.util.List;
 
