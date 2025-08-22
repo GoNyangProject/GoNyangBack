@@ -2,15 +2,20 @@ package com.example.tossback.member.entity;
 
 import com.example.tossback.common.entity.BaseEntity;
 import com.example.tossback.common.enums.UserRoleType;
+import com.example.tossback.mypage.accountInfo.entity.PetInfo;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
 public class Member extends BaseEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(unique = true, nullable = false)
     private String userId;
@@ -18,9 +23,11 @@ public class Member extends BaseEntity {
     private String username;
     private String password;
     private String email;
-    private Long phoneNumber;
+    private String phoneNumber;
     private Long birth;
     private Character gender;
     @Enumerated(EnumType.STRING)
     private UserRoleType userRoleType = UserRoleType.ROLE_USER;
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<PetInfo> petInfoList = new ArrayList<>();
 }
