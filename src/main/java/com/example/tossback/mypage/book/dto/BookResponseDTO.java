@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class BookResponse {
+public class BookResponseDTO {
     private String uuid;
     private String username;
     private String menuName;

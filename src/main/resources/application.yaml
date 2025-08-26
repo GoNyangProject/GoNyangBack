@@ -19,7 +19,7 @@ logging:
 
 # security 관련
 secret-key: 33D3AFA30260B16223DB5995202F35B1AFDB14B2FB8AE60D7CF79CD402F52D0769742896041858C6C9D632E2346E48CC98ECDE7B2E31B1F8624C223B6BFC15DD
-access-expiration-hours: 1
+access-expiration-hours: 6
 refresh-expiration-hours: 240
 
 --- # 운영

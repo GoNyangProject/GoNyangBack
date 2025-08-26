@@ -1,5 +1,6 @@
-package com.example.tossback.mypage.book.entity;
+package com.example.tossback.menu.entity;
 
+import com.example.tossback.mypage.book.entity.Book;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

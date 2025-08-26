@@ -1,5 +1,6 @@
 package com.example.tossback.mypage.book.entity;
 
+import com.example.tossback.menu.entity.Menu;
 import com.example.tossback.common.entity.BaseEntity;
 import com.example.tossback.member.entity.Member;
 import jakarta.persistence.*;
