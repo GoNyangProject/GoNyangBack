@@ -31,6 +31,7 @@ public class BookServiceImpl implements BookService {
             bookResponseDTO.setMenuName(book.getMenu().getName());
             bookResponseDTO.setContent(book.getMenu().getContent());
             bookResponseDTO.setBookDate(book.getBookDate());
+            bookResponseDTO.setPrice(book.getPrice());
             bookManageRespons.add(bookResponseDTO);
         }
         return bookManageRespons;

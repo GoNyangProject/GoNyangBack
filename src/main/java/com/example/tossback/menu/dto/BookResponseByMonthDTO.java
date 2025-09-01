@@ -5,5 +5,5 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MenuRequestDTO {
+public class BookResponseByMonthDTO {
 }

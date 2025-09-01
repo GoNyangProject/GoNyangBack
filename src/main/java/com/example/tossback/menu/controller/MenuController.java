@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -21,6 +22,11 @@ public class MenuController {
     @GetMapping()
     public ResponseEntity<CommonResponse> getMenu() {
         return new ResponseEntity<>(new CommonResponse(menuService.getMenuList()), HttpStatus.OK);
+    }
+
+    @GetMapping("/date")
+    public ResponseEntity<CommonResponse> getBookByMonth(@RequestParam("date") String date) {
+        return new ResponseEntity<>(new CommonResponse(menuService.getBookByMonth(date)), HttpStatus.OK);
     }
 
 }

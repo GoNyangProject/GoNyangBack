@@ -20,6 +20,8 @@ public class Book extends BaseEntity {
 
     private LocalDateTime bookDate;
 
+    private int price;
+
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;

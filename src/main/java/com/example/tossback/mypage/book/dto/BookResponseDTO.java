@@ -15,5 +15,5 @@ public class BookResponseDTO {
     private String content;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime bookDate;
-
+    private int price;
 }

@@ -4,6 +4,8 @@ import com.example.tossback.menu.dto.MenuResponseDTO;
 import com.example.tossback.menu.entity.Menu;
 import com.example.tossback.menu.repository.MenuRepository;
 import com.example.tossback.menu.service.MenuService;
+import com.example.tossback.mypage.book.dto.BookResponseDTO;
+import com.example.tossback.mypage.book.repository.BookRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,9 +15,11 @@ import java.util.List;
 public class MenuServiceImpl implements MenuService {
 
     private final MenuRepository menuRepository;
+    private final BookRepository bookRepository;
 
-    public MenuServiceImpl(MenuRepository menuRepository) {
+    public MenuServiceImpl(MenuRepository menuRepository, BookRepository bookRepository) {
         this.menuRepository = menuRepository;
+        this.bookRepository = bookRepository;
     }
 
     @Override
@@ -35,5 +39,11 @@ public class MenuServiceImpl implements MenuService {
             result.add(menuDTO);
         }
         return result;
+    }
+
+    @Override
+    public List<BookResponseDTO> getBookByMonth(String date) {
+        System.out.println("date = " + date);
+        return List.of();
     }
 }
