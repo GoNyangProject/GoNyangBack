@@ -5,9 +5,13 @@ import com.example.tossback.menu.entity.Menu;
 import com.example.tossback.menu.repository.MenuRepository;
 import com.example.tossback.menu.service.MenuService;
 import com.example.tossback.mypage.book.dto.BookResponseDTO;
+import com.example.tossback.mypage.book.entity.Book;
 import com.example.tossback.mypage.book.repository.BookRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +47,27 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<BookResponseDTO> getBookByMonth(String date) {
-        System.out.println("date = " + date);
-        return List.of();
+
+        List<BookResponseDTO> result = new ArrayList<>();
+
+        YearMonth yearMonth = YearMonth.parse(date, DateTimeFormatter.ofPattern("yyyy-MM"));
+
+        LocalDateTime startDate = yearMonth.atDay(1).atStartOfDay();
+        LocalDateTime endDate = yearMonth.atEndOfMonth().atTime(23, 59, 59);
+
+        List<Book> books = bookRepository.findBooksInMonth(startDate, endDate);
+
+        for (Book book : books) {
+            BookResponseDTO bookResponseDTO = new BookResponseDTO();
+            bookResponseDTO.setUuid(book.getUuid());
+            bookResponseDTO.setUsername(book.getMember().getUsername());
+            bookResponseDTO.setMenuName(book.getMenu().getName());
+            bookResponseDTO.setContent(book.getMenu().getContent());
+            bookResponseDTO.setBookDate(book.getBookDate());
+            bookResponseDTO.setPrice(book.getPrice());
+            result.add(bookResponseDTO);
+        }
+
+        return result;
     }
 }
