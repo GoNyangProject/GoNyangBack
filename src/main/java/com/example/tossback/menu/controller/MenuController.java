@@ -24,7 +24,7 @@ public class MenuController {
         return new ResponseEntity<>(new CommonResponse(menuService.getMenuList()), HttpStatus.OK);
     }
 
-    @GetMapping("/date")
+    @GetMapping("/month")
     public ResponseEntity<CommonResponse> getBookByMonth(@RequestParam("date") String date) {
         return new ResponseEntity<>(new CommonResponse(menuService.getBookByMonth(date)), HttpStatus.OK);
     }
