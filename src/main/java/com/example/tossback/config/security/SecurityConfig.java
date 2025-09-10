@@ -60,7 +60,7 @@ public class SecurityConfig {
         // REST API 쓸거니까 기본설정 안한다.
         http.httpBasic(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests.
-                requestMatchers("/member/**").permitAll()
+                requestMatchers("/member/**", "/payments/**").permitAll()
                 .anyRequest().authenticated());
         //STATELESS 방식 (클라이언트에 정보안담는거)
         http.sessionManagement(session ->
@@ -75,9 +75,10 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedHeader("*"); // GET, POST, PUT, DELETE (javascript 요청 허용)
-        configuration.addAllowedOriginPattern("*"); // 모든 IP 주소 허용 (프론트엔드 IP만 허용)
+        configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(true); // 클라이언트에서 쿠키 요청 허용
-
+//        configuration.addAllowedOrigin("http://localhost:3000");
+        configuration.addAllowedOriginPattern("*"); // 모든 IP 주소 허용 (프론트엔드 IP만 허용)
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
