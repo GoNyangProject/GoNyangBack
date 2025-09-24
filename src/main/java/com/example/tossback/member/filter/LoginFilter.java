@@ -61,12 +61,14 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
-
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         CustomMemberDetails memberDetails = (CustomMemberDetails) authentication.getPrincipal();
 
 //        String username = memberDetails.getUsername();
         Long memberId = memberDetails.getMemberId();
         String userId = memberDetails.getUserId();
+        String username = memberDetails.getUsername();
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
         GrantedAuthority auth = iterator.next();
@@ -86,6 +88,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         MemberResponseDTO userData = new MemberResponseDTO();
         userData.setMemberId(memberId);
         userData.setUserId(userId);
+        userData.setUsername(username);
+        System.out.println("username = " + username);
         CommonResponse result = new CommonResponse(userData);
         ObjectMapper mapper = new ObjectMapper();
         response.getWriter().write(mapper.writeValueAsString(result));

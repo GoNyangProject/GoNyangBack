@@ -1,6 +1,6 @@
 package com.example.tossback.mypage.book.service.impl;
 
-import com.example.tossback.mypage.book.dto.BookResponse;
+import com.example.tossback.mypage.book.dto.BookResponseDTO;
 import com.example.tossback.mypage.book.entity.Book;
 import com.example.tossback.mypage.book.repository.BookRepository;
 import com.example.tossback.mypage.book.service.BookService;
@@ -19,21 +19,22 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookResponse> getBookData(long memberId) {
+    public List<BookResponseDTO> getBookData(long memberId) {
 
         List<Book> books = bookRepository.findAllByMemberId(memberId);
-        List<BookResponse> bookResponses = new ArrayList<>();
+        List<BookResponseDTO> bookManageRespons = new ArrayList<>();
 
         for (Book book : books) {
-            BookResponse bookResponse = new BookResponse();
-            bookResponse.setUuid(book.getUuid());
-            bookResponse.setUsername(book.getMember().getUsername());
-            bookResponse.setMenuName(book.getMenu().getName());
-            bookResponse.setContent(book.getMenu().getContent());
-            bookResponse.setBookDate(book.getBookDate());
-            bookResponses.add(bookResponse);
+            BookResponseDTO bookResponseDTO = new BookResponseDTO();
+            bookResponseDTO.setUuid(book.getUuid());
+            bookResponseDTO.setUsername(book.getMember().getUsername());
+            bookResponseDTO.setMenuName(book.getMenu().getName());
+            bookResponseDTO.setContent(book.getMenu().getContent());
+            bookResponseDTO.setBookDate(book.getBookDate());
+            bookResponseDTO.setPrice(book.getPrice());
+            bookManageRespons.add(bookResponseDTO);
         }
-        return bookResponses;
+        return bookManageRespons;
     }
 
 }

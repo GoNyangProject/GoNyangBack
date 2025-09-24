@@ -1,5 +1,6 @@
 package com.example.tossback.mypage.book.entity;
 
+import com.example.tossback.menu.entity.Menu;
 import com.example.tossback.common.entity.BaseEntity;
 import com.example.tossback.member.entity.Member;
 import jakarta.persistence.*;
@@ -18,6 +19,8 @@ public class Book extends BaseEntity {
     private String uuid = UUID.randomUUID().toString();
 
     private LocalDateTime bookDate;
+
+    private int price;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
