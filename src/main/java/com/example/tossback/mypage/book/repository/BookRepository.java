@@ -9,6 +9,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
+
+    boolean existsByOrderId(String orderId);
+
     List<Book> findAllByMemberId(long memberId);
 
     @Query("SELECT b FROM Book b WHERE b.bookDate BETWEEN :startDate AND :endDate")

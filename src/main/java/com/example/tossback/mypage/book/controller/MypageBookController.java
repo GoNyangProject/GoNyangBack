@@ -1,7 +1,7 @@
 package com.example.tossback.mypage.book.controller;
 
-import com.example.tossback.mypage.book.service.BookService;
 import com.example.tossback.common.dto.CommonResponse;
+import com.example.tossback.mypage.book.service.MypageBookService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/mypage")
-public class BookController {
+public class MypageBookController {
 
-    private final BookService bookService;
+    private final MypageBookService bookService;
 
-    public BookController(BookService bookService) {
+    public MypageBookController(MypageBookService bookService) {
         this.bookService = bookService;
     }
 

@@ -4,7 +4,7 @@ import com.example.tossback.menu.dto.MenuResponseDTO;
 import com.example.tossback.menu.entity.Menu;
 import com.example.tossback.menu.repository.MenuRepository;
 import com.example.tossback.menu.service.MenuService;
-import com.example.tossback.mypage.book.dto.BookResponseDTO;
+import com.example.tossback.mypage.book.dto.MypageBookResponseDTO;
 import com.example.tossback.mypage.book.entity.Book;
 import com.example.tossback.mypage.book.repository.BookRepository;
 import org.springframework.stereotype.Service;
@@ -46,9 +46,9 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public List<BookResponseDTO> getBookByMonth(String date) {
+    public List<MypageBookResponseDTO> getBookByMonth(String date) {
 
-        List<BookResponseDTO> result = new ArrayList<>();
+        List<MypageBookResponseDTO> result = new ArrayList<>();
 
         YearMonth yearMonth = YearMonth.parse(date, DateTimeFormatter.ofPattern("yyyy-MM"));
 
@@ -58,8 +58,8 @@ public class MenuServiceImpl implements MenuService {
         List<Book> books = bookRepository.findBooksInMonth(startDate, endDate);
 
         for (Book book : books) {
-            BookResponseDTO bookResponseDTO = new BookResponseDTO();
-            bookResponseDTO.setUuid(book.getUuid());
+            MypageBookResponseDTO bookResponseDTO = new MypageBookResponseDTO();
+            bookResponseDTO.setOrderId(book.getOrderId());
             bookResponseDTO.setUsername(book.getMember().getUsername());
             bookResponseDTO.setMenuName(book.getMenu().getName());
             bookResponseDTO.setContent(book.getMenu().getContent());

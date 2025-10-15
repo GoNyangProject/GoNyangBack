@@ -16,7 +16,7 @@ import java.util.UUID;
 public class Book extends BaseEntity {
 
     @Id
-    private String uuid = UUID.randomUUID().toString();
+    private String orderId;
 
     private LocalDateTime bookDate;
 

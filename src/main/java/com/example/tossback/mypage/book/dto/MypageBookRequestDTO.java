@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class BookRequestDTO {
+public class MypageBookRequestDTO {
 
     private String uuid;
 
