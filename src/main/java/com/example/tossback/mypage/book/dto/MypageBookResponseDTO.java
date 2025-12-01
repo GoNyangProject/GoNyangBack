@@ -13,5 +13,6 @@ public class MypageBookResponseDTO {
     private String menuName;
     private String content;
     private LocalDateTime bookDate;
+    private LocalDateTime deletedAt;
     private int price;
 }

@@ -6,4 +6,6 @@ public interface BookService {
 
     boolean addBook(BookRequestDTO bookRequestDTO);
 
+    boolean cancelBook(String orderId);
+
 }

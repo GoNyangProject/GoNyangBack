@@ -13,6 +13,8 @@ import com.example.tossback.mypage.book.repository.BookRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @Slf4j
 public class BookServiceImpl implements BookService {
@@ -50,6 +52,15 @@ public class BookServiceImpl implements BookService {
         } catch (Exception e) {
             throw new CommonException("예약 실패 : " + e.getMessage(), ErrorCode.FAIL_BOOK);
         }
+        return true;
+    }
+
+    @Override
+    public boolean cancelBook(String orderId) {
+        LocalDateTime now = LocalDateTime.now();
+        Book book = bookRepository.findByOrderId(orderId);
+        book.setDeletedAt(now);
+        bookRepository.save(book);
         return true;
     }
 }

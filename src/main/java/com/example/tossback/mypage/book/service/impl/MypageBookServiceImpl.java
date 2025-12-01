@@ -33,6 +33,7 @@ public class MypageBookServiceImpl implements MypageBookService {
             bookResponseDTO.setContent(book.getMenu().getContent());
             bookResponseDTO.setBookDate(book.getBookDate());
             bookResponseDTO.setPrice(book.getPrice());
+            bookResponseDTO.setDeletedAt(book.getDeletedAt());
             bookManageRespons.add(bookResponseDTO);
         }
         return bookManageRespons;

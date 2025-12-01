@@ -16,4 +16,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query("SELECT b FROM Book b WHERE b.bookDate BETWEEN :startDate AND :endDate")
     List<Book> findBooksInMonth(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+
+    Book findByOrderId(String orderId);
+
 }
