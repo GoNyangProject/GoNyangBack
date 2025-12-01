@@ -21,6 +21,7 @@ public class Payments {
     @Enumerated(EnumType.STRING)
     private PaymentStatus status;
 
+    @Column(unique = true)
     private String transactionKey; // 토스 결제 고유 키
 
     @Enumerated(EnumType.STRING)

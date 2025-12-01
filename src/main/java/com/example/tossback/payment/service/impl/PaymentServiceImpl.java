@@ -24,21 +24,27 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentResponseDTO pay(PaymentRequestDto request) {
         PaymentResponseDTO response = new PaymentResponseDTO();
         LocalDateTime now = LocalDateTime.now();
-        try {
-            Payments payments = new Payments();
-            payments.setAmount(request.getAmount());
-            payments.setStatus(PaymentStatus.SUCCESS);
-            payments.setTransactionKey(request.getPaymentKey());
-            payments.setMethod(request.getMethod());
-            payments.setApprovedAt(now);
-            paymentsRepository.save(payments);
+        response.setStatus(PaymentStatus.SUCCESS);
+        boolean payCheck = paymentsRepository.existsByTransactionKey(request.getPaymentKey());
+        if (!payCheck) {
+            try {
+                Payments payments = new Payments();
+                payments.setAmount(request.getAmount());
+                payments.setStatus(PaymentStatus.SUCCESS);
+                payments.setTransactionKey(request.getPaymentKey());
+                payments.setMethod(request.getMethod());
+                payments.setApprovedAt(now);
+                paymentsRepository.save(payments);
 
-        } catch (Exception e) {
-            log.error("결제 저장 중 오류 발생. transactionKey: {}", request.getPaymentKey(), e);
-            response.setStatus("fail");
-            return response;
+            } catch (Exception e) {
+                log.error("결제 저장 중 오류 발생. transactionKey: {}", request.getPaymentKey(), e);
+                response.setStatus(PaymentStatus.FAIL);
+                return response;
+            }
+        } else {
+            log.error("이미 결제된 항목. transactionKey: {}", request.getPaymentKey());
+            response.setStatus(PaymentStatus.EXIST);
         }
-        response.setStatus("success");
         response.setApprovedAt(now);
         response.setOrderName(request.getOrderName());
         response.setAmount(request.getAmount());

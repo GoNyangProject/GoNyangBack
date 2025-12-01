@@ -1,14 +1,16 @@
 package com.example.tossback.mypage.book.entity;
 
-import com.example.tossback.menu.entity.Menu;
 import com.example.tossback.common.entity.BaseEntity;
 import com.example.tossback.member.entity.Member;
-import jakarta.persistence.*;
+import com.example.tossback.menu.entity.Menu;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Getter
