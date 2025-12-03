@@ -111,7 +111,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                         Map.of(
                                 "type", "FAIL",
                                 "errorCode", exception.getErrorCode().getCode(), // "0401"
-                                "message", exception.getMessage()
+                                "message", exception.getErrorCode().getMessage()
                         )
                 )
         );
