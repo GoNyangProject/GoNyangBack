@@ -1,7 +1,7 @@
 package com.example.tossback.config.security;
 
-import com.example.tossback.config.jwt.util.JWTUtil;
 import com.example.tossback.config.jwt.filter.JWTFilter;
+import com.example.tossback.config.jwt.util.JWTUtil;
 import com.example.tossback.config.redis.util.RedisUtil;
 import com.example.tossback.member.filter.LoginFilter;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,13 +60,13 @@ public class SecurityConfig {
         // REST API 쓸거니까 기본설정 안한다.
         http.httpBasic(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests.
-                requestMatchers("/member/**", "/payments/**").permitAll()
+                requestMatchers("/member/**","/menu/**").permitAll()
                 .anyRequest().authenticated());
         //STATELESS 방식 (클라이언트에 정보안담는거)
         http.sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         );
-        http.addFilterBefore(new JWTFilter(jwtUtil ,redisUtil, refreshExpirationHours), LoginFilter.class);
+        http.addFilterBefore(new JWTFilter(jwtUtil, redisUtil, refreshExpirationHours), LoginFilter.class);
         http.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, redisUtil, refreshExpirationHours), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
