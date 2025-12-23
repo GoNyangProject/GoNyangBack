@@ -60,7 +60,7 @@ public class SecurityConfig {
         // REST API 쓸거니까 기본설정 안한다.
         http.httpBasic(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests.
-                requestMatchers("/member/**","/menu/**").permitAll()
+                requestMatchers("/member/**","/menu/**", "/contract/**").permitAll()
                 .anyRequest().authenticated());
         //STATELESS 방식 (클라이언트에 정보안담는거)
         http.sessionManagement(session ->
