@@ -89,6 +89,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         userData.setMemberId(memberId);
         userData.setUserId(userId);
         userData.setUsername(username);
+        userData.setUserType(role);
         CommonResponse result = new CommonResponse(userData);
         ObjectMapper mapper = new ObjectMapper();
         response.getWriter().write(mapper.writeValueAsString(result));

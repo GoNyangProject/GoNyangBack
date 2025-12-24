@@ -1,5 +1,6 @@
 package com.example.tossback.member.dto;
 
+import com.example.tossback.common.enums.UserRoleType;
 import com.example.tossback.member.entity.Member;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,7 +24,7 @@ public class CustomMemberDetails implements UserDetails {
         collection.add(new GrantedAuthority() {
             @Override
             public String getAuthority() {
-                return "ROLE_ADMIN";
+                return member.getUserRoleType().toString();
             }
         });
 
