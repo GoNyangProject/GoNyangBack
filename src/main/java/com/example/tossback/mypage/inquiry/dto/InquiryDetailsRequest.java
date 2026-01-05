@@ -6,5 +6,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class InquiryDetailsRequest {
-    private Long inquiryNumber;
+    private String inquiryNumber;
 }

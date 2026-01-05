@@ -4,6 +4,8 @@ import com.example.tossback.common.dto.CommonResponse;
 import com.example.tossback.member.dto.MemberDTO;
 import com.example.tossback.member.repository.MemberRepository;
 import com.example.tossback.member.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -22,14 +24,20 @@ public class MemberController {
         this.memberRepository = memberRepository;
         this.memberService = memberService;
     }
+
     @GetMapping("/checkid")
-    public ResponseEntity<CommonResponse> checkId(@RequestParam String id){
+    public ResponseEntity<CommonResponse> checkId(@RequestParam String id) {
         return new ResponseEntity<>(new CommonResponse(memberService.checkId(id)), HttpStatus.OK);
     }
 
     @PostMapping("/join")
     public ResponseEntity<CommonResponse> join(@Validated @RequestBody MemberDTO memberDTO) {
         return new ResponseEntity<>(new CommonResponse(memberService.joinMember(memberDTO)), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<CommonResponse> logout(HttpServletRequest request, HttpServletResponse response) {
+        return new ResponseEntity<>(new CommonResponse(memberService.logout(request, response)), HttpStatus.OK);
     }
 
 }

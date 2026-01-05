@@ -1,14 +1,20 @@
 package com.example.tossback.mypage.inquiry.service.impl;
 
+import com.example.tossback.mypage.inquiry.dto.CreateInquiry;
 import com.example.tossback.mypage.inquiry.dto.InquiryDetailsRequest;
 import com.example.tossback.mypage.inquiry.dto.InquiryDetailsResponse;
 import com.example.tossback.mypage.inquiry.dto.InquiryResponseDTO;
 import com.example.tossback.mypage.inquiry.entity.Inquiry;
+import com.example.tossback.mypage.inquiry.enums.InquiryStatus;
 import com.example.tossback.mypage.inquiry.repository.InquiryRepository;
 import com.example.tossback.mypage.inquiry.service.InquiryService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 
@@ -66,4 +72,45 @@ public class InquiryServiceImpl implements InquiryService {
             throw new RuntimeException("문의 상세 정보를 불러오는 중 오류가 발생했습니다.");
         }
     }
+
+    @Override
+    @Transactional
+    public Boolean createInquiry(CreateInquiry createInquiry) {
+        int retry = 0;
+
+        while (retry < 3) {
+            try {
+                Inquiry inquiry = new Inquiry();
+                inquiry.setInquiryNumber(generateInquiryNumber());
+                inquiry.setUserId(createInquiry.getUserId());
+                inquiry.setTitle(createInquiry.getTitle());
+                inquiry.setContent(createInquiry.getContent());
+                inquiry.setCategory(createInquiry.getCategory());
+                inquiry.setInquiryStatus(InquiryStatus.PENDING);
+
+                inquiryRepository.save(inquiry);
+                return true;
+
+            } catch (DataIntegrityViolationException e) {
+                retry++;
+            }
+        }
+
+        throw new IllegalStateException("문의번호 생성 실패");
+    }
+    private String generateInquiryNumber() {
+        String today = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
+        String prefix = today + "-";
+
+        String lastNumber = inquiryRepository.findLastInquiryNumberByPrefix(prefix);
+
+        int nextSeq = 1;
+        if (lastNumber != null) {
+            String seqStr = lastNumber.substring(lastNumber.length() - 6);
+            nextSeq = Integer.parseInt(seqStr) + 1;
+        }
+
+        return prefix + String.format("%06d", nextSeq);
+    }
+
 }

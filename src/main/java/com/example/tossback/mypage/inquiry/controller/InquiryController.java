@@ -2,6 +2,7 @@ package com.example.tossback.mypage.inquiry.controller;
 
 
 import com.example.tossback.common.dto.CommonResponse;
+import com.example.tossback.mypage.inquiry.dto.CreateInquiry;
 import com.example.tossback.mypage.inquiry.dto.InquiryDetailsRequest;
 import com.example.tossback.mypage.inquiry.service.InquiryService;
 import org.springframework.http.HttpStatus;
@@ -17,13 +18,20 @@ public class InquiryController {
     public InquiryController(InquiryService inquiryService) {
         this.inquiryService = inquiryService;
     }
+
     @GetMapping
     public ResponseEntity<CommonResponse> getInquiry(@RequestParam String userId) {
         return new ResponseEntity<>(new CommonResponse(inquiryService.getInquiry(userId)), HttpStatus.OK);
     }
+
     @PostMapping
     public ResponseEntity<CommonResponse> getInquiryDetails(@RequestBody InquiryDetailsRequest inquiryDetailsRequest) {
         return new ResponseEntity<>(new CommonResponse(inquiryService.getInquiryDetails(inquiryDetailsRequest)), HttpStatus.OK);
+    }
+
+    @PostMapping("/inquiries")
+    public ResponseEntity<CommonResponse> createInquiry(@RequestBody CreateInquiry createInquiry) {
+        return new ResponseEntity<>(new CommonResponse(inquiryService.createInquiry(createInquiry)), HttpStatus.OK);
     }
 
 }

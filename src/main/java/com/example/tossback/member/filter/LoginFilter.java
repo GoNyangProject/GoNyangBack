@@ -4,6 +4,7 @@ import com.example.tossback.common.dto.CommonResponse;
 import com.example.tossback.common.enums.ErrorCode;
 import com.example.tossback.common.enums.JwtTokenType;
 import com.example.tossback.common.exception.CommonException;
+import com.example.tossback.config.jwt.util.CookieUtil;
 import com.example.tossback.config.jwt.util.JWTUtil;
 import com.example.tossback.config.redis.util.RedisUtil;
 import com.example.tossback.member.dto.CustomMemberDetails;
@@ -82,8 +83,16 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         long refreshExpirationSeconds = refreshExpirationHours * 60 * 60;  // hours -> seconds
         redisUtil.setDataExpire("refreshToken:" + userId, refreshToken, refreshExpirationSeconds);
 
-        response.addHeader("Authorization", "Bearer " + accessToken);
-        response.addHeader("Refresh-Token", refreshToken);
+        response.addHeader(
+                "Set-Cookie",
+                CookieUtil.createHttpOnlyCookie("accessToken", accessToken, 60 * 60)
+        );
+
+        response.addHeader(
+                "Set-Cookie",
+                CookieUtil.createHttpOnlyCookie("refreshToken", refreshToken, refreshExpirationSeconds)
+        );
+
 
         MemberResponseDTO userData = new MemberResponseDTO();
         userData.setMemberId(memberId);

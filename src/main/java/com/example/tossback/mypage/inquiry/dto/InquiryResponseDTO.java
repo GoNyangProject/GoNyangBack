@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Setter
 public class InquiryResponseDTO {
     private String title;
-    private Long inquiryNumber;
+    private String inquiryNumber;
     private LocalDateTime createdAt;
     private InquiryStatus status;
 }

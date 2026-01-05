@@ -33,8 +33,12 @@ public class JWTUtil {
     }
 
     public String getRole(String token) {
-//        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("role", String.class);
-        return "ROLE_ADMIN";
+        return Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("role", String.class); // 토큰 생성 시 "role"로 저장했을 경우
     }
 
     public Boolean isExpired(String token) {

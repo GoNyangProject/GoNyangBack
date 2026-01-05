@@ -2,6 +2,7 @@ package com.example.tossback.member.dto;
 
 import com.example.tossback.member.entity.Member;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
@@ -20,16 +21,12 @@ public class CustomMemberDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collection = new ArrayList<>();
 
-        collection.add(new GrantedAuthority() {
-            @Override
-            public String getAuthority() {
-                return "ROLE_ADMIN";
-            }
-        });
+        if (member.getUserRoleType() != null) {
+            collection.add(new SimpleGrantedAuthority(member.getUserRoleType().name()));
+        }
 
         return collection;
     }
-
     public long getMemberId() {
         return member.getId();
     }
