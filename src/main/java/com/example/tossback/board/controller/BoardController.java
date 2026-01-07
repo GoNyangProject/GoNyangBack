@@ -21,8 +21,13 @@ public class BoardController {
     }
 
     @GetMapping()
-    public ResponseEntity<CommonResponse> getBoard(@RequestParam BoardCode boardCode, @RequestParam String searchKeyword) {
-        return new ResponseEntity<>(new CommonResponse(boardService.getBoards(boardCode, searchKeyword)), HttpStatus.OK);
+    public ResponseEntity<CommonResponse> getBoard(@RequestParam BoardCode boardCode, @RequestParam String searchKeyword, @RequestParam int size, @RequestParam int page) {
+        return new ResponseEntity<>(new CommonResponse(boardService.getBoards(boardCode, searchKeyword, size, page)), HttpStatus.OK);
+    }
+
+    @GetMapping("/detail")
+    public ResponseEntity<CommonResponse> getBoardDetail(@RequestParam long boardCode) {
+        return new ResponseEntity<>(new CommonResponse(boardService.getBoardDetail(boardCode)), HttpStatus.OK);
     }
 
 }
