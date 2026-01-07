@@ -60,7 +60,8 @@ public class SecurityConfig {
         // REST API 쓸거니까 기본설정 안한다.
         http.httpBasic(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests.
-                requestMatchers("/member/**", "/payments/**",
+                requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .requestMatchers("/member/**", "/payments/**",
                         "/oauth/**",
                         "/auth/**").permitAll()
                 .anyRequest().authenticated());
