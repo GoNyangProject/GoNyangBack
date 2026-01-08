@@ -60,6 +60,10 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.MariaDBDialect
     open-in-view: false
+  app:
+    frontend:
+      login-success-uri: http://localhost:3000
+      login-fail-uri: http://localhost:3000/member/login
 logging:
   level:
     root: info
@@ -89,6 +93,10 @@ spring:
   file:
     storage:
       path: ./uploads/pets
+  app:
+    frontend:
+      login-success-uri: http://localhost:3000
+      login-fail-uri: http://localhost:3000/member/login
 logging:
   level:
     root: info

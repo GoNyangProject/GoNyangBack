@@ -22,15 +22,15 @@ public class CustomMemberDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collection = new ArrayList<>();
 
-//        if (member.getUserRoleType() != null) {
-//            collection.add(new SimpleGrantedAuthority(member.getUserRoleType().name()));
-//        }
-        collection.add(new GrantedAuthority() {
-            @Override
-            public String getAuthority() {
-                return member.getUserRoleType().toString();
-            }
-        });
+        if (member.getUserRoleType() != null) {
+            collection.add(new SimpleGrantedAuthority(member.getUserRoleType().name()));
+        }
+//        collection.add(new GrantedAuthority() {
+//            @Override
+//            public String getAuthority() {
+//                return member.getUserRoleType().toString();
+//            }
+//        });
 
         return collection;
     }
