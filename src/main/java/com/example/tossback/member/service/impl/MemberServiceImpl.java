@@ -80,6 +80,7 @@ public class MemberServiceImpl implements MemberService {
         memberResponseDTO.setUsername(user.getUsername());
         memberResponseDTO.setUserId(userId);
         memberResponseDTO.setRole(user.getUserRoleType().name());
+        memberResponseDTO.setUserType(user.getUserRoleType().name());
 
         return memberResponseDTO;
     }

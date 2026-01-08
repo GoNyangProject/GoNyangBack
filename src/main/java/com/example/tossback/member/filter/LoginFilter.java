@@ -99,6 +99,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         userData.setUserId(userId);
         userData.setUsername(username);
         userData.setUserType(role);
+        userData.setRole(role);
         CommonResponse result = new CommonResponse(userData);
         ObjectMapper mapper = new ObjectMapper();
         response.getWriter().write(mapper.writeValueAsString(result));
