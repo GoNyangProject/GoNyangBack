@@ -3,6 +3,7 @@ package com.example.tossback.member.entity;
 import com.example.tossback.common.entity.BaseEntity;
 import com.example.tossback.common.enums.UserRoleType;
 import com.example.tossback.member.enums.AuthProvider;
+import com.example.tossback.member.enums.UserStatus;
 import com.example.tossback.mypage.accountInfo.entity.PetInfo;
 import com.example.tossback.mypage.book.entity.Book;
 import jakarta.persistence.*;
@@ -36,53 +37,16 @@ public class Member extends BaseEntity {
     private String providerId; // 카카오 user id
     @Enumerated(EnumType.STRING)
     private UserRoleType userRoleType = UserRoleType.ROLE_USER;
-
+    @Enumerated(EnumType.STRING)
+    private UserStatus status = UserStatus.NORMAL;
+    private int useCount = 0;
+    private long totalSpentAmount = 0;
+    private String memo;
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Book> books = new ArrayList<>();
-
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<PetInfo> petInfoList = new ArrayList<>();
 
-
-
-//    public static Member createKakaoUser(Long kakaoId, String email, String nickname) {
-//        Member member = new Member();
-//        member.setProvider(AuthProvider.KAKAO);
-//        member.setProviderId(kakaoId.toString());
-//        member.setEmail(email);
-//        member.setUsername(nickname);
-//
-//        member.setUserId("KAKAO_" + kakaoId); // unique 보장용
-//        member.setPassword(null);
-//
-//        return member;
-//    }
-//
-//    public static Member createNaverUser(String naverId, String email, String nickname) {
-//        Member member = new Member();
-//        member.setProvider(AuthProvider.NAVER);
-//        member.setProviderId(naverId);
-//        member.setEmail(email);
-//        member.setUsername(nickname);
-//
-//        member.setUserId("NAVER_" + naverId);
-//        member.setPassword(null);
-//
-//        return member;
-//    }
-//
-//    public static Member createGoogleUser(String googleId, String email, String nickname) {
-//        Member member = new Member();
-//        member.setProvider(AuthProvider.GOOGLE);
-//        member.setProviderId(googleId);
-//        member.setEmail(email);
-//        member.setUsername(nickname);
-//
-//        member.setUserId("GOOGLE_" + googleId);
-//        member.setPassword(null);
-//
-//        return member;
-//    }
     public static Member createSocialUser(String SocialId, String email, String userName, AuthProvider provider ) {
         Member member = new Member();
         member.setProvider(provider);
@@ -94,6 +58,11 @@ public class Member extends BaseEntity {
         member.setPassword(null);
 
         return member;
+    }
+    //이용완료시 이 메서드 실행
+    public void addBookingActivity(long amount) {
+        this.useCount += 1;
+        this.totalSpentAmount += amount;
     }
 
 }

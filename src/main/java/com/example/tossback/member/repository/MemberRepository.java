@@ -2,6 +2,8 @@ package com.example.tossback.member.repository;
 
 import com.example.tossback.member.entity.Member;
 import com.example.tossback.member.enums.AuthProvider;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,5 +20,6 @@ public interface MemberRepository extends JpaRepository<Member,Long > {
 
     Optional<Member> findByProviderAndProviderId(AuthProvider provider, String providerId);
 
+    Page<Member> findByUsernameContainingOrUserIdContaining(String userName, String userId, Pageable pageable);
 //    boolean existsByUserId(String userId);
 }

@@ -62,8 +62,8 @@ spring:
     open-in-view: false
   app:
     frontend:
-      login-success-uri: http://localhost:3000
-      login-fail-uri: http://localhost:3000/member/login
+      login-success-uri: ${APP_FRONTEND_LOGIN_SUCCESS_URI}
+      login-fail-uri: ${APP_FRONTEND_LOGIN_FAIL_URI}
 logging:
   level:
     root: info
