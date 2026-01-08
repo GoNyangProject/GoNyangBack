@@ -1,5 +1,6 @@
 package com.example.tossback.member.dto;
 
+import com.example.tossback.common.enums.UserRoleType;
 import com.example.tossback.member.entity.Member;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,12 +22,19 @@ public class CustomMemberDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collection = new ArrayList<>();
 
-        if (member.getUserRoleType() != null) {
-            collection.add(new SimpleGrantedAuthority(member.getUserRoleType().name()));
-        }
+//        if (member.getUserRoleType() != null) {
+//            collection.add(new SimpleGrantedAuthority(member.getUserRoleType().name()));
+//        }
+        collection.add(new GrantedAuthority() {
+            @Override
+            public String getAuthority() {
+                return member.getUserRoleType().toString();
+            }
+        });
 
         return collection;
     }
+
     public long getMemberId() {
         return member.getId();
     }

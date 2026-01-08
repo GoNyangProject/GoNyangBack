@@ -61,7 +61,7 @@ public class SecurityConfig {
         http.httpBasic(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests.
                 requestMatchers("/member/**", "/payments/**",
-                        "/oauth/**",
+                        "/oauth/**","/menu/**", "/contract/**",
                         "/auth/**").permitAll()
                 .anyRequest().authenticated());
         //STATELESS 방식 (클라이언트에 정보안담는거)

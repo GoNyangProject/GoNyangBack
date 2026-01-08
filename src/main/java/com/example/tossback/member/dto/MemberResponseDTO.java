@@ -10,6 +10,7 @@ public class MemberResponseDTO {
     long memberId;
     String userId;
     String username;
+    String userType;
 
     public static MemberResponseDTO from(Member member) {
         MemberResponseDTO dto = new MemberResponseDTO();

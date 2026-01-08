@@ -65,6 +65,7 @@ public class MenuServiceImpl implements MenuService {
             bookResponseDTO.setContent(book.getMenu().getContent());
             bookResponseDTO.setBookDate(book.getBookDate());
             bookResponseDTO.setPrice(book.getPrice());
+            bookResponseDTO.setDeletedAt(book.getDeletedAt());
             result.add(bookResponseDTO);
         }
 
