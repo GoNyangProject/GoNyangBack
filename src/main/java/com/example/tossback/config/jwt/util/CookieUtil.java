@@ -14,21 +14,24 @@ public class CookieUtil {
         return null;
     }
 
-    public static String createHttpOnlyCookie(String name, String value, long maxAgeSeconds) {
+    public static String createCookie(String name, String value, long maxAgeSeconds, boolean isHttpOnly) {
         StringBuilder sb = new StringBuilder();
 
         sb.append(name).append("=").append(value).append("; ");
         sb.append("Max-Age=").append(maxAgeSeconds).append("; ");
         sb.append("Path=/; ");
-        sb.append("HttpOnly; ");
 
-        // 로컬 개발 환경(HTTP)에서는 Secure 속성이 있으면 삭제가 안 될 수 있습니다.
-        // 만약 HTTPS 환경이라면 sb.append("Secure; "); 를 추가해야 합니다.
+        if (isHttpOnly) {
+            sb.append("HttpOnly; ");
+        }
+
         if (!isLocal()) {
+            // 배포 환경(HTTPS) 설정
             sb.append("Secure; ");
-            sb.append("SameSite=None"); // 배포 환경(HTTPS)
+            sb.append("SameSite=None");
         } else {
-            sb.append("SameSite=Lax");   // 로컬 환경(HTTP)
+            // 로컬 환경(HTTP) 설정
+            sb.append("SameSite=Lax");
         }
 
         return sb.toString();

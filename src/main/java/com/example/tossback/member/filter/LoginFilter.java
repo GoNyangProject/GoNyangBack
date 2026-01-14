@@ -80,17 +80,17 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String accessToken = jwtUtil.createToken(userId, role, JwtTokenType.ACCESS);
         String refreshToken = jwtUtil.createToken(userId, null, JwtTokenType.REFRESH);
 
-        long refreshExpirationSeconds = refreshExpirationHours * 60 * 60;  // hours -> seconds
+        long refreshExpirationSeconds = refreshExpirationHours * 60 * 60;
         redisUtil.setDataExpire("refreshToken:" + userId, refreshToken, refreshExpirationSeconds);
 
         response.addHeader(
                 "Set-Cookie",
-                CookieUtil.createHttpOnlyCookie("accessToken", accessToken, 60 * 60)
+                CookieUtil.createCookie("accessToken", accessToken, 60 * 60, false)
         );
 
         response.addHeader(
                 "Set-Cookie",
-                CookieUtil.createHttpOnlyCookie("refreshToken", refreshToken, refreshExpirationSeconds)
+                CookieUtil.createCookie("refreshToken", refreshToken, refreshExpirationSeconds, true)
         );
 
 

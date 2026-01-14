@@ -66,9 +66,9 @@ public class JWTFilter extends OncePerRequestFilter {
                     long refreshExpirationSeconds = refreshExpirationHours * 60 * 60;
                     redisUtil.setDataExpire("refreshToken:" + userId,newRefresh,refreshExpirationSeconds);
                     response.addHeader("Set-Cookie",
-                            CookieUtil.createHttpOnlyCookie("accessToken", newAccess, 60 * 60));
+                            CookieUtil.createCookie("accessToken", newAccess, 60 * 60, false));
                     response.addHeader("Set-Cookie",
-                            CookieUtil.createHttpOnlyCookie("refreshToken", newRefresh, refreshExpirationSeconds));
+                            CookieUtil.createCookie("refreshToken", newRefresh, refreshExpirationSeconds, true));
 
                     setAuthentication(userId, jwtUtil.getRole(refreshToken));
 

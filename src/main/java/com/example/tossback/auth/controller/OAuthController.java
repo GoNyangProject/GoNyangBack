@@ -151,7 +151,7 @@ public class OAuthController {
 
     private static void setAuthCookies(HttpServletResponse response, OAuthLoginResult result) {
         ResponseCookie accessCookie = ResponseCookie.from("accessToken", result.getAccessToken())
-                .httpOnly(true)
+                .httpOnly(false)
                 .secure(false)
                 .path("/")
                 .maxAge(60 * 60)

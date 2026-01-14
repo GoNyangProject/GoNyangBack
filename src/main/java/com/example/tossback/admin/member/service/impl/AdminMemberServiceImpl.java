@@ -10,12 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -28,34 +25,16 @@ public class AdminMemberServiceImpl implements AdminMemberService {
 
     @Override
     @Transactional(readOnly = true)
-    public AdminMemberListResponse getMemberList(String search, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-        Page<Member> memberPage;
+    public AdminMemberListResponse getMemberList(String search, int page, int size, String sort, String status) {
+        Pageable pageable = PageRequest.of(page, size);
 
-        if (search != null && !search.trim().isEmpty()) {
-            memberPage = memberRepository.findByUsernameContainingOrUserIdContaining(search, search, pageable);
-        } else {
-            memberPage = memberRepository.findAll(pageable);
-        }
-        List<AdminMemberList> dtoList = memberPage.getContent().stream()
-                .map(m -> AdminMemberList.builder()
-                        .id(m.getId())
-                        .displayName(String.format("%s(%s)", m.getUsername(), m.getUserId()))
-                        .createdAt(m.getCreatedAt())
-                        .useCount(m.getUseCount())
-                        .totalSpentAmount(m.getTotalSpentAmount())
-                        .status(m.getStatus())
-                        .memo(m.getMemo())
-                        .build())
-                .collect(Collectors.toList());
-
+        Page<AdminMemberList> memberPage = memberRepository.findAllAdminMembers(search, sort, status, pageable);
         return AdminMemberListResponse.builder()
-                .content(dtoList)
+                .content(memberPage.getContent())
                 .totalPages(memberPage.getTotalPages())
                 .totalElements(memberPage.getTotalElements())
                 .build();
     }
-
     @Override
     public AdminMemberMemoResponse getMemberMemo(Long id) {
         Member member = memberRepository.findById(id)

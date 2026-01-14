@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
+public interface InquiryRepository extends JpaRepository<Inquiry, Long>, InquiryRepositoryCustom {
     List<Inquiry> findByUserId(String userId);
 
     Inquiry findByInquiryNumber(String inquiryNumber);

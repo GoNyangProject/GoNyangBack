@@ -19,9 +19,11 @@ public class AdminMemberController {
 
     @GetMapping("/list")
     public ResponseEntity<CommonResponse> getMemberList(@RequestParam(required = false) String search,
+                                                        @RequestParam(required = false, defaultValue = "JOIN") String sort,
+                                                        @RequestParam(required = false, defaultValue = "ALL") String status,
                                                         @RequestParam(defaultValue = "0") int page,
                                                         @RequestParam(defaultValue = "10") int size) {
-        return new ResponseEntity<>(new CommonResponse(adminMemberService.getMemberList(search, page, size)), HttpStatus.OK);
+        return new ResponseEntity<>(new CommonResponse(adminMemberService.getMemberList(search, page, size, sort, status)), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/memo")
