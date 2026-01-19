@@ -13,4 +13,7 @@ public class BoardResponseDTO {
     private String title;
     private String content;
     private LocalDateTime createdAt;
+    private int viewCount;
+    private int likeCount;
+    private String imgUrl;
 }

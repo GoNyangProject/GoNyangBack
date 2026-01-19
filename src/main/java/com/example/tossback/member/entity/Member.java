@@ -31,9 +31,9 @@ public class Member extends BaseEntity {
     private Long birth;
     private Character gender;
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private AuthProvider provider;
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private String providerId; // 카카오 user id
     @Enumerated(EnumType.STRING)
     private UserRoleType userRoleType = UserRoleType.ROLE_USER;

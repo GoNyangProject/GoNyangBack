@@ -1,14 +1,12 @@
 package com.example.tossback.board.controller;
 
+import com.example.tossback.board.dto.BoardRequestDTO;
 import com.example.tossback.board.enums.BoardCode;
 import com.example.tossback.board.service.BoardService;
 import com.example.tossback.common.dto.CommonResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/board")
@@ -28,6 +26,11 @@ public class BoardController {
     @GetMapping("/detail")
     public ResponseEntity<CommonResponse> getBoardDetail(@RequestParam long boardCode) {
         return new ResponseEntity<>(new CommonResponse(boardService.getBoardDetail(boardCode)), HttpStatus.OK);
+    }
+
+    @PostMapping("/like")
+    public ResponseEntity<CommonResponse> updateLike(@RequestBody BoardRequestDTO boardRequestDTO) {
+        return new ResponseEntity<>(new CommonResponse(boardService.updateLike(boardRequestDTO.getBoardId())), HttpStatus.OK);
     }
 
 }

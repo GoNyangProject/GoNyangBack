@@ -35,6 +35,9 @@ public class BoardServiceImpl implements BoardService {
             boardResponseDTO.setId(board.getId());
             boardResponseDTO.setTitle(board.getTitle());
             boardResponseDTO.setCreatedAt(board.getCreatedAt());
+            boardResponseDTO.setViewCount(board.getViewCount());
+            boardResponseDTO.setLikeCount(board.getLikeCount());
+            boardResponseDTO.setImgUrl(board.getImgUrl());
             return boardResponseDTO;
         }).toList();
         result.setBoards(response);
@@ -47,10 +50,33 @@ public class BoardServiceImpl implements BoardService {
     public BoardResponseDTO getBoardDetail(long boardCode) {
         BoardResponseDTO result = new BoardResponseDTO();
         Board board = boardRepository.findById(boardCode);
+
+        board.incrementViewCount();
+        boardRepository.save(board);
+
         result.setId(board.getId());
         result.setTitle(board.getTitle());
         result.setContent(board.getContent());
         result.setCreatedAt(board.getCreatedAt());
+        result.setLikeCount(board.getLikeCount());
+        result.setViewCount(board.getViewCount());
+        result.setImgUrl(board.getImgUrl());
+        return result;
+    }
+
+    @Override
+    public BoardResponseDTO updateLike(long boardId) {
+        BoardResponseDTO result = new BoardResponseDTO();
+        Board board = boardRepository.findById(boardId);
+        board.setLikeCount(board.getLikeCount() + 1);
+        boardRepository.save(board);
+
+        result.setId(board.getId());
+        result.setTitle(board.getTitle());
+        result.setContent(board.getContent());
+        result.setCreatedAt(board.getCreatedAt());
+        result.setLikeCount(board.getLikeCount());
+        result.setViewCount(board.getViewCount());
         return result;
     }
 }

@@ -10,4 +10,6 @@ public interface BoardService {
 
     BoardResponseDTO getBoardDetail(long boardCode);
 
+    BoardResponseDTO updateLike(long boardId);
+
 }

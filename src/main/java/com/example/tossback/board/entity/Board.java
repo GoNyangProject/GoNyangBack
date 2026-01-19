@@ -5,6 +5,7 @@ import com.example.tossback.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
@@ -29,6 +30,13 @@ public class Board extends BaseEntity {
 
     private int likeCount;
 
+    @ColumnDefault("0")
+    private int viewCount = 0;
+
     private String imgUrl;
+
+    public void incrementViewCount() {
+        this.viewCount++;
+    }
 
 }
