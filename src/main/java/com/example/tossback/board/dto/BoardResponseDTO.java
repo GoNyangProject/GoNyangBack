@@ -1,5 +1,6 @@
 package com.example.tossback.board.dto;
 
+import com.example.tossback.member.dto.MemberResponseDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,4 +17,5 @@ public class BoardResponseDTO {
     private int viewCount;
     private int likeCount;
     private String imgUrl;
+    private MemberResponseDTO member;
 }

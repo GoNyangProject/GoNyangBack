@@ -6,6 +6,8 @@ import com.example.tossback.board.entity.Board;
 import com.example.tossback.board.enums.BoardCode;
 import com.example.tossback.board.repository.BoardRepository;
 import com.example.tossback.board.service.BoardService;
+import com.example.tossback.member.dto.MemberResponseDTO;
+import com.example.tossback.member.entity.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -50,10 +52,10 @@ public class BoardServiceImpl implements BoardService {
     public BoardResponseDTO getBoardDetail(long boardCode) {
         BoardResponseDTO result = new BoardResponseDTO();
         Board board = boardRepository.findById(boardCode);
-
         board.incrementViewCount();
         boardRepository.save(board);
-
+        Member member = board.getMember();
+        MemberResponseDTO memberResponseDTO = MemberResponseDTO.from(member);
         result.setId(board.getId());
         result.setTitle(board.getTitle());
         result.setContent(board.getContent());
@@ -61,6 +63,7 @@ public class BoardServiceImpl implements BoardService {
         result.setLikeCount(board.getLikeCount());
         result.setViewCount(board.getViewCount());
         result.setImgUrl(board.getImgUrl());
+        result.setMember(memberResponseDTO);
         return result;
     }
 

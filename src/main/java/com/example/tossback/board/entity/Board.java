@@ -28,7 +28,8 @@ public class Board extends BaseEntity {
 
     private String content;
 
-    private int likeCount;
+    @ColumnDefault("0")
+    private int likeCount = 0;
 
     @ColumnDefault("0")
     private int viewCount = 0;
