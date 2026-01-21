@@ -11,5 +11,4 @@ public class AdminInquiryListResponse {
     private List<AdminInquiryList> content;
     private int totalPages;
     private long totalElements;
-
 }

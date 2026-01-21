@@ -1,5 +1,6 @@
 package com.example.tossback.board.dto;
 
+import com.example.tossback.board.entity.Board;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,4 +17,14 @@ public class BoardResponseDTO {
     private int viewCount;
     private int likeCount;
     private String imgUrl;
+    private String userId;
+    public static BoardResponseDTO fromEntity(Board board) {
+        BoardResponseDTO dto = new BoardResponseDTO();
+        dto.setId(board.getId());
+        dto.setTitle(board.getTitle());
+        dto.setUserId(board.getMember().getUserId());
+        dto.setCreatedAt(board.getCreatedAt());
+        dto.setViewCount(board.getViewCount());
+        return dto;
+    }
 }

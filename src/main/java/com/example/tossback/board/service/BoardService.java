@@ -8,7 +8,7 @@ public interface BoardService {
 
     BoardResultDTO getBoards(BoardCode boardCode, String searchKeyword, int size, int page);
 
-    BoardResponseDTO getBoardDetail(long boardCode);
+    BoardResponseDTO getBoardDetail(long boardCode, String userId);
 
     BoardResponseDTO updateLike(long boardId);
 

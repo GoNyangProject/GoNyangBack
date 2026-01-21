@@ -6,11 +6,13 @@ import com.example.tossback.board.entity.Board;
 import com.example.tossback.board.enums.BoardCode;
 import com.example.tossback.board.repository.BoardRepository;
 import com.example.tossback.board.service.BoardService;
+import com.example.tossback.config.redis.util.RedisUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,9 +20,11 @@ import java.util.List;
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
+    private final RedisUtil redisUtil;
 
-    public BoardServiceImpl(BoardRepository boardRepository) {
+    public BoardServiceImpl(BoardRepository boardRepository, RedisUtil redisUtil) {
         this.boardRepository = boardRepository;
+        this.redisUtil = redisUtil;
     }
 
     @Override
@@ -47,13 +51,16 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public BoardResponseDTO getBoardDetail(long boardCode) {
+    @Transactional
+    public BoardResponseDTO getBoardDetail(long boardCode, String userId) {
         BoardResponseDTO result = new BoardResponseDTO();
         Board board = boardRepository.findById(boardCode);
-
-        board.incrementViewCount();
-        boardRepository.save(board);
-
+        String redisKey = "view:board:" + boardCode + ":user:" + userId;
+        String isViewed = redisUtil.getData(redisKey);
+        if (isViewed == null) {
+            board.incrementViewCount();
+            redisUtil.setDataExpire(redisKey, "visited", 86400);
+        }
         result.setId(board.getId());
         result.setTitle(board.getTitle());
         result.setContent(board.getContent());
