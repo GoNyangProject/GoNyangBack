@@ -46,26 +46,20 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-        //iframe 허용안함 (내 웹위에 다른웹을 얹는거 H2데이터베이스 같은거)
         http.headers(httpSecurityHeadersConfigurer ->
                 httpSecurityHeadersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)
         );
         http.csrf(AbstractHttpConfigurer::disable);
-        //cors 허용 프론트랑 백이랑 포트가달라서 막을려는거 허용
         http.cors(httpSecurityCorsConfigurer ->
                 httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()));
-        //form태그를 이용한 로그인 x
         http.formLogin(AbstractHttpConfigurer::disable);
-        // REST API 쓸거니까 기본설정 안한다.
         http.httpBasic(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests.
                 requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .requestMatchers("/member/**", "/payments/**",
                         "/oauth/**","/menu/**", "/contract/**",
-                        "/auth/**").permitAll()
+                        "/auth/**", "/community/list/**","/notice/**").permitAll()
                 .anyRequest().authenticated());
-        //STATELESS 방식 (클라이언트에 정보안담는거)
         http.sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         );

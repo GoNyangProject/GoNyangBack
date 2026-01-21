@@ -24,8 +24,8 @@ public class BoardController {
     }
 
     @GetMapping("/detail")
-    public ResponseEntity<CommonResponse> getBoardDetail(@RequestParam long boardCode) {
-        return new ResponseEntity<>(new CommonResponse(boardService.getBoardDetail(boardCode)), HttpStatus.OK);
+    public ResponseEntity<CommonResponse> getBoardDetail(@RequestParam long boardCode, @RequestParam String userId) {
+        return new ResponseEntity<>(new CommonResponse(boardService.getBoardDetail(boardCode, userId)), HttpStatus.OK);
     }
 
     @PostMapping("/like")
