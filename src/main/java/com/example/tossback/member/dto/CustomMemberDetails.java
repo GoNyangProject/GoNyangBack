@@ -1,6 +1,5 @@
 package com.example.tossback.member.dto;
 
-import com.example.tossback.common.enums.UserRoleType;
 import com.example.tossback.member.entity.Member;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -46,7 +45,7 @@ public class CustomMemberDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return member.getUsername();
+        return member.getUserId();
     }
 
     public String getUserId() {return member.getUserId();}
