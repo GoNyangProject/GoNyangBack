@@ -11,4 +11,5 @@ public interface CommentService {
 
     List<CommentResponseDTO> getComment(long boardId);
 
+    boolean deleteComment(long commentId);
 }

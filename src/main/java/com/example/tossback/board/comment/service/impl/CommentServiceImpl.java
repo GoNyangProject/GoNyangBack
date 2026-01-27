@@ -51,4 +51,16 @@ public class CommentServiceImpl implements CommentService {
                 .map(CommentResponseDTO::from)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public boolean deleteComment(long commentId) {
+        Comment comment = commentRepository.findById(commentId);
+        System.out.println("commentId = " + commentId);
+        if (comment != null) {
+            commentRepository.deleteById(commentId);
+        } else {
+            return false;
+        }
+        return true;
+    }
 }

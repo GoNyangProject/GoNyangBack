@@ -1,5 +1,6 @@
 package com.example.tossback.board.comment.controller;
 
+import com.example.tossback.board.comment.dto.CommentDeleteDTO;
 import com.example.tossback.board.comment.dto.CommentRequestDTO;
 import com.example.tossback.board.comment.service.CommentService;
 import com.example.tossback.common.dto.CommonResponse;
@@ -25,6 +26,11 @@ public class CommentController {
 
     @GetMapping
     public ResponseEntity<CommonResponse> getComment(@RequestParam long boardId) {
-        return new ResponseEntity<>(new CommonResponse(commentService.getComment(boardId)),HttpStatus.OK);
+        return new ResponseEntity<>(new CommonResponse(commentService.getComment(boardId)), HttpStatus.OK);
+    }
+
+    @PostMapping("/delete")
+    public ResponseEntity<CommonResponse> deleteComment(@RequestBody CommentDeleteDTO commentDeleteDTO) {
+        return new ResponseEntity<>(new CommonResponse(commentService.deleteComment(commentDeleteDTO.getCommentId())), HttpStatus.OK);
     }
 }
