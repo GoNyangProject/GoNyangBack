@@ -47,7 +47,6 @@ public class CommentServiceImpl implements CommentService {
     public List<CommentResponseDTO> getComment(long boardId) {
         List<Comment> rootComments = commentRepository.findByBoardIdAndParentIsNull(boardId);
 
-        // 2. DTO 내부의 생성자나 메서드에서 자식을 타고 내려가며 변환
         return rootComments.stream()
                 .map(CommentResponseDTO::from)
                 .collect(Collectors.toList());
