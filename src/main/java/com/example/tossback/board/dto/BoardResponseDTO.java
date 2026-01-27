@@ -1,7 +1,8 @@
 package com.example.tossback.board.dto;
 
-import com.example.tossback.member.dto.MemberResponseDTO;
 import com.example.tossback.board.entity.Board;
+import com.example.tossback.board.enums.BoardCode;
+import com.example.tossback.member.dto.MemberResponseDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,6 +21,8 @@ public class BoardResponseDTO {
     private String imgUrl;
     private String userId;
     private MemberResponseDTO member;
+    private BoardCode boardCode;
+
     public static BoardResponseDTO fromEntity(Board board) {
         BoardResponseDTO dto = new BoardResponseDTO();
         dto.setId(board.getId());

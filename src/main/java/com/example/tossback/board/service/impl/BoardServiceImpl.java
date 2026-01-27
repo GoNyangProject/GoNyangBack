@@ -73,6 +73,7 @@ public class BoardServiceImpl implements BoardService {
         result.setViewCount(board.getViewCount());
         result.setImgUrl(board.getImgUrl());
         result.setMember(memberResponseDTO);
+        result.setBoardCode(board.getBoardType().getBoardCode());
         return result;
     }
 

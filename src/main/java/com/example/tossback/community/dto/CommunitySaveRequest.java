@@ -9,4 +9,5 @@ public class CommunitySaveRequest {
     private String title;
     private String content;
     private String boardCode;
+    private long boardId;
 }

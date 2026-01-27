@@ -21,7 +21,7 @@ public class BookController {
     }
 
     @PostMapping()
-    public ResponseEntity<CommonResponse> getBook(@RequestBody BookRequestDTO bookRequestDTO) {
+    public ResponseEntity<CommonResponse> addBook(@RequestBody BookRequestDTO bookRequestDTO) {
         return new ResponseEntity<>(new CommonResponse(bookService.addBook(bookRequestDTO)), HttpStatus.OK);
     }
 

@@ -40,6 +40,7 @@ public class CommunityServiceImpl implements CommunityService {
     private final MemberRepository memberRepository;
     @Value("${spring.file.storage.path}")
     private String storagePath;
+
     @Override
     public CommunityListResponse getCommunityList(int page, int size, BoardCode boardCode) {
         Sort sort = Sort.by(Sort.Order.desc("createdAt"));
@@ -105,11 +106,19 @@ public class CommunityServiceImpl implements CommunityService {
         BoardType boardType = boardTypeRepository.findByBoardCode(BoardCode.valueOf(saveRequest.getBoardCode()))
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시판입니다."));
 
-        Board board = new Board();
-        board.setTitle(saveRequest.getTitle());
-        board.setContent(saveRequest.getContent());
-        board.setMember(member);
-        board.setBoardType(boardType);
+        Board board = boardRepository.findById(saveRequest.getBoardId());
+        if (board != null) {
+            board.setTitle(saveRequest.getTitle());
+            board.setContent(saveRequest.getContent());
+            board.setMember(member);
+            board.setBoardType(boardType);
+        } else {
+            board = new Board();
+            board.setTitle(saveRequest.getTitle());
+            board.setContent(saveRequest.getContent());
+            board.setMember(member);
+            board.setBoardType(boardType);
+        }
         boardRepository.save(board);
         log.info("게시글 저장 완료! 작성자: {}, 게시판: {}", userId, saveRequest.getBoardCode());
         return true;
