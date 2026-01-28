@@ -1,9 +1,9 @@
-package com.example.tossback.community.service;
+package com.example.tossback.board.community.service;
 
 import com.example.tossback.board.enums.BoardCode;
-import com.example.tossback.community.dto.CommunityListResponse;
-import com.example.tossback.community.dto.CommunitySaveRequest;
-import com.example.tossback.community.dto.FileUploadResponseDto;
+import com.example.tossback.board.community.dto.CommunityListResponse;
+import com.example.tossback.board.community.dto.CommunitySaveRequest;
+import com.example.tossback.board.community.dto.FileUploadResponseDto;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface CommunityService {

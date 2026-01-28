@@ -19,16 +19,13 @@ public class Book extends BaseEntity {
 
     @Id
     private String orderId;
-
     private LocalDateTime bookDate;
-
     private int price;
-
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
-
     @ManyToOne
     @JoinColumn(name = "menu_id")
     private Menu menu;
+    private String reservedPhone;
 }
