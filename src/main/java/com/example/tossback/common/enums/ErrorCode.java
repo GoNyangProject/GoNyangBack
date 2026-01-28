@@ -10,7 +10,9 @@ public enum ErrorCode {
     UNKNOWN("9999", "알 수 없는 오류입니다.", HttpStatus.INTERNAL_SERVER_ERROR),
     Unauthorized("0401", "ID 혹은 비밀번호가 일치하지 않습니다.", HttpStatus.UNAUTHORIZED),
     FAIL_JOIN("0001", "회원 가입 실패", HttpStatus.BAD_REQUEST),
-    FAIL_BOOK("0409", "예약 실패", HttpStatus.CONFLICT),;
+    FAIL_BOOK("0409", "예약 실패", HttpStatus.CONFLICT),
+    INVALID_PARAMETER("0400", "잘못된 요청 파라미터입니다.", HttpStatus.BAD_REQUEST),
+    ALREADY_BLOCKED("0408", "이미 차단된 날짜입니다.", HttpStatus.CONFLICT);
 
     private final String code;
     private final String message;

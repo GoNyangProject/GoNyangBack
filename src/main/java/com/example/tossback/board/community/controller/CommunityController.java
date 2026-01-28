@@ -1,9 +1,9 @@
-package com.example.tossback.community.controller;
+package com.example.tossback.board.community.controller;
 
 import com.example.tossback.board.enums.BoardCode;
 import com.example.tossback.common.dto.CommonResponse;
-import com.example.tossback.community.dto.CommunitySaveRequest;
-import com.example.tossback.community.service.CommunityService;
+import com.example.tossback.board.community.dto.CommunitySaveRequest;
+import com.example.tossback.board.community.service.CommunityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

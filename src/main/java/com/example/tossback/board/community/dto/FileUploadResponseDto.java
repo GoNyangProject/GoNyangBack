@@ -1,4 +1,4 @@
-package com.example.tossback.community.dto;
+package com.example.tossback.board.community.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

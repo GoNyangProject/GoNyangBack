@@ -1,4 +1,4 @@
-package com.example.tossback.community.service.impl;
+package com.example.tossback.board.community.service.impl;
 
 import com.example.tossback.board.dto.BoardResponseDTO;
 import com.example.tossback.board.entity.Board;
@@ -6,10 +6,10 @@ import com.example.tossback.board.entity.BoardType;
 import com.example.tossback.board.enums.BoardCode;
 import com.example.tossback.board.repository.BoardRepository;
 import com.example.tossback.board.repository.BoardTypeRepository;
-import com.example.tossback.community.dto.CommunityListResponse;
-import com.example.tossback.community.dto.CommunitySaveRequest;
-import com.example.tossback.community.dto.FileUploadResponseDto;
-import com.example.tossback.community.service.CommunityService;
+import com.example.tossback.board.community.dto.CommunityListResponse;
+import com.example.tossback.board.community.dto.CommunitySaveRequest;
+import com.example.tossback.board.community.dto.FileUploadResponseDto;
+import com.example.tossback.board.community.service.CommunityService;
 import com.example.tossback.member.entity.Member;
 import com.example.tossback.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
