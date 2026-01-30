@@ -7,7 +7,7 @@ import com.example.tossback.board.community.dto.FileUploadResponseDto;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface CommunityService {
-    CommunityListResponse getCommunityList(int page, int size, BoardCode boardCode);
+    CommunityListResponse getCommunityList(int page, int size, BoardCode boardCode,String search, String sort);
     FileUploadResponseDto uploadFile(MultipartFile file);
     Boolean saveCommunity(CommunitySaveRequest saveRequest);
 }

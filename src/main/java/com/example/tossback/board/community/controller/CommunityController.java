@@ -19,8 +19,10 @@ public class CommunityController {
     @GetMapping("/list")
     public ResponseEntity<CommonResponse> getCommunityList(@RequestParam(defaultValue = "0") int page,
                                                            @RequestParam(defaultValue = "10") int size,
-                                                           @RequestParam BoardCode boardCode) {
-        return new ResponseEntity<>(new CommonResponse(communityService.getCommunityList(page, size, boardCode)), HttpStatus.OK);
+                                                           @RequestParam BoardCode boardCode,
+                                                           @RequestParam(required = false) String search,
+                                                           @RequestParam(required = false, defaultValue = "latest") String sort) {
+        return new ResponseEntity<>(new CommonResponse(communityService.getCommunityList(page, size, boardCode,search,sort)), HttpStatus.OK);
     }
     @PostMapping("/upload")
     public ResponseEntity<CommonResponse> uploadFile(@RequestParam("file") MultipartFile file) {

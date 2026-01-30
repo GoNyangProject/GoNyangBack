@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,11 +41,10 @@ public class CommunityServiceImpl implements CommunityService {
     private String storagePath;
 
     @Override
-    public CommunityListResponse getCommunityList(int page, int size, BoardCode boardCode) {
-        Sort sort = Sort.by(Sort.Order.desc("createdAt"));
-        Pageable pageable = PageRequest.of(page, size, sort);
+    public CommunityListResponse getCommunityList(int page, int size, BoardCode boardCode, String search, String sort) {
+        Pageable pageable = PageRequest.of(page, size);
 
-        Page<Board> boardPage = boardRepository.findCommunityListWithFilters(pageable, boardCode);
+        Page<Board> boardPage = boardRepository.findCommunityListWithFilters(pageable, boardCode, search, sort);
 
         CommunityListResponse response = new CommunityListResponse();
 

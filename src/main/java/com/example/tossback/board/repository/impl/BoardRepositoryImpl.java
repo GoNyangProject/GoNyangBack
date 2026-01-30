@@ -3,6 +3,7 @@ package com.example.tossback.board.repository.impl;
 import com.example.tossback.board.entity.Board;
 import com.example.tossback.board.enums.BoardCode;
 import com.example.tossback.board.repository.BoardRepositoryCustom;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -27,12 +28,15 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
 
 
     @Override
-    public Page<Board> findCommunityListWithFilters(Pageable pageable, BoardCode boardCode) {
+    public Page<Board> findCommunityListWithFilters(Pageable pageable, BoardCode boardCode, String search, String sort) {
         List<Board> content = queryFactory
                 .selectFrom(board)
                 .leftJoin(board.member, member).fetchJoin()
-                .where(boardCodeEq(boardCode))
-                .orderBy(board.createdAt.desc())
+                .where(
+                        boardCodeEq(boardCode),
+                        searchKeywordLike(search)
+                )
+                .orderBy(getSortOrder(sort))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -40,10 +44,28 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         Long total = queryFactory
                 .select(board.count())
                 .from(board)
-                .where(boardCodeEq(boardCode)) // 카운트 쿼리도 3번 게시판만!
+                .where(boardCodeEq(boardCode))
                 .fetchOne();
 
         return new PageImpl<>(content, pageable, total != null ? total : 0L);
+    }
+    private BooleanExpression searchKeywordLike(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return null;
+        }
+        return board.title.containsIgnoreCase(keyword)
+                .or(board.content.containsIgnoreCase(keyword))
+                .or(member.userId.containsIgnoreCase(keyword));
+    }
+    private OrderSpecifier<?> getSortOrder(String sort) {
+        if (sort == null) return board.createdAt.desc();
+
+        return switch (sort) {
+            case "views" ->
+                    board.viewCount.desc();
+            case "likes" -> board.likeCount.desc();
+            default -> board.createdAt.desc();
+        };
     }
 
     private BooleanExpression boardCodeEq(BoardCode boardCode) {
