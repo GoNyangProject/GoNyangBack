@@ -58,7 +58,7 @@ public class SecurityConfig {
                 requestMatchers("/api/admin/**","/admin/**").hasRole("ADMIN")
                 .requestMatchers("/member/**", "/payments/**",
                         "/oauth/**","/menu/**", "/contract/**",
-                        "/auth/**", "/community/list/**","/notice/**").permitAll()
+                        "/auth/**", "/community/list/**","/board/**").permitAll()
                 .anyRequest().authenticated());
         http.sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
