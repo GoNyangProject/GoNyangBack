@@ -31,7 +31,7 @@ public class CommentServiceImpl implements CommentService {
     public CommentResponseDTO createComment(CommentRequestDTO commentRequestDTO) {
         Comment parent = commentRepository.findById(commentRequestDTO.getParentId());
         Comment result = new Comment();
-        Board board = boardRepository.findByBoardType_BoardCode(commentRequestDTO.getBoardCode());
+        Board board = boardRepository.findById(commentRequestDTO.getBoardId());
         Member member = memberRepository.findById(commentRequestDTO.getMemberId());
         result.setBoard(board);
         result.setMember(member);
