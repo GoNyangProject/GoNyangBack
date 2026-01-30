@@ -44,7 +44,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         Long total = queryFactory
                 .select(board.count())
                 .from(board)
-                .where(boardCodeEq(boardCode))
+                .where(boardCodeEq(boardCode),searchKeywordLike(search))
                 .fetchOne();
 
         return new PageImpl<>(content, pageable, total != null ? total : 0L);
