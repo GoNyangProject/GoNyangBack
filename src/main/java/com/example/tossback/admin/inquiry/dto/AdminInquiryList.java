@@ -32,6 +32,7 @@ public class AdminInquiryList {
                         .inquiryStatus(inquiry.getInquiryStatus())
                         .title(inquiry.getTitle())
                         .answer(inquiry.getAnswer())
+                        .content(inquiry.getContent())
                         .build();
         }
 }

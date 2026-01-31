@@ -9,6 +9,7 @@ import com.example.tossback.member.dto.CheckId;
 import com.example.tossback.member.dto.MemberDTO;
 import com.example.tossback.member.dto.MemberResponseDTO;
 import com.example.tossback.member.entity.Member;
+import com.example.tossback.member.enums.AuthProvider;
 import com.example.tossback.member.repository.MemberRepository;
 import com.example.tossback.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -49,6 +50,8 @@ public class MemberServiceImpl implements MemberService {
                 member.setPhoneNumber(memberDTO.getPhoneNumber());
                 LocalDateTime now = LocalDateTime.now();
                 member.setCreatedAt(now);
+                member.setProvider(AuthProvider.LOCAL);
+                member.setProviderId("NONE");
                 memberRepository.save(member);
             } catch (Exception e) {
                 log.error(e.getMessage());
@@ -88,7 +91,6 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Boolean logout(HttpServletRequest request, HttpServletResponse response) {
         String accessToken = CookieUtil.getCookieValue(request, "accessToken");
-        log.info("엑세스 토큰 {}" , accessToken);
         if (accessToken != null) {
             try {
                 String userId = jwtUtil.getUserId(accessToken);
