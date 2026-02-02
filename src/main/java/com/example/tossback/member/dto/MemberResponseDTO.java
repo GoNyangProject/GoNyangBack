@@ -12,6 +12,7 @@ public class MemberResponseDTO {
     private String username;
     private String role;
     private String userType;
+    private String petImagePath;
 
     public static MemberResponseDTO from(Member member) {
         MemberResponseDTO dto = new MemberResponseDTO();

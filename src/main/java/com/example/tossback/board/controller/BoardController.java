@@ -32,5 +32,9 @@ public class BoardController {
     public ResponseEntity<CommonResponse> updateLike(@RequestBody BoardRequestDTO boardRequestDTO) {
         return new ResponseEntity<>(new CommonResponse(boardService.updateLike(boardRequestDTO.getBoardId())), HttpStatus.OK);
     }
+    @PostMapping("/delete")
+    public ResponseEntity<CommonResponse> deleteBoard(@RequestBody BoardRequestDTO boardRequestDTO) {
+        return new ResponseEntity<>(new CommonResponse(boardService.deleteBoard(boardRequestDTO)),HttpStatus.OK);
+    }
 
 }

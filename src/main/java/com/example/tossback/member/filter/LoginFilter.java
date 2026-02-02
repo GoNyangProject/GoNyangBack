@@ -92,7 +92,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                 "Set-Cookie",
                 CookieUtil.createCookie("refreshToken", refreshToken, refreshExpirationSeconds, true)
         );
-
+        String petImagePath = memberDetails.getPetImagePath();
 
         MemberResponseDTO userData = new MemberResponseDTO();
         userData.setMemberId(memberId);
@@ -100,6 +100,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         userData.setUsername(username);
         userData.setUserType(role);
         userData.setRole(role);
+        userData.setPetImagePath(petImagePath);
         CommonResponse result = new CommonResponse(userData);
         ObjectMapper mapper = new ObjectMapper();
         response.getWriter().write(mapper.writeValueAsString(result));

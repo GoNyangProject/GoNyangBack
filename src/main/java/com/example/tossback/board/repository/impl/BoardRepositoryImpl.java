@@ -32,10 +32,11 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     public Page<Board> findCommunityListWithFilters(Pageable pageable, BoardCode boardCode, String search, String sort) {
         List<Board> content = queryFactory
                 .selectFrom(board)
-                .leftJoin(board.member, member).fetchJoin()
+                .leftJoin(board.member, member).fetchJoin() // 메인 쿼리는 이미 잘 되어 있음
                 .where(
                         boardCodeEq(boardCode),
-                        searchKeywordLike(search)
+                        searchKeywordLike(search),
+                        board.deletedAt.isNull()
                 )
                 .orderBy(getSortOrder(sort))
                 .offset(pageable.getOffset())
@@ -45,10 +46,56 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         Long total = queryFactory
                 .select(board.count())
                 .from(board)
-                .where(boardCodeEq(boardCode), searchKeywordLike(search))
+                .leftJoin(board.member, member)
+                .where(
+                        boardCodeEq(boardCode),
+                        searchKeywordLike(search),
+                        board.deletedAt.isNull()
+                )
                 .fetchOne();
 
         return new PageImpl<>(content, pageable, total != null ? total : 0L);
+    }
+
+
+    @Override
+    public Page<Board> findAdminBoardList(Pageable pageable, String search, String status) {
+        List<Board> content = queryFactory
+                .selectFrom(board)
+                .leftJoin(board.member, member).fetchJoin()
+                .where(
+                        searchKeywordLike(search),
+                        statusEq(status)
+                )
+                .orderBy(board.createdAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long total = queryFactory
+                .select(board.count())
+                .from(board)
+                .leftJoin(board.member, member)
+                .where(
+                        searchKeywordLike(search),
+                        statusEq(status)
+                )
+                .fetchOne();
+
+        return new PageImpl<>(content, pageable, total != null ? total : 0L);
+    }
+
+    private BooleanExpression statusEq(String status) {
+        if (status == null || status.isEmpty()) {
+            return null; // '전체 상태'일 때는 조건을 걸지 않음
+        }
+        if ("DELETED".equals(status)) {
+            return board.deletedAt.isNotNull(); // 삭제된 글만 보기
+        }
+        if ("NORMAL".equals(status)) {
+            return board.deletedAt.isNull();    // 게시 중인 글만 보기
+        }
+        return null;
     }
 
     private BooleanExpression searchKeywordLike(String keyword) {

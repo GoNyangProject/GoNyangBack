@@ -10,4 +10,5 @@ public interface BoardRepositoryCustom {
 
     Page<Board> searchBoards(BoardCode boardCode, String keyword, Pageable pageable, String sort);
 
+    Page<Board> findAdminBoardList(Pageable pageable, String search, String status);
 }
