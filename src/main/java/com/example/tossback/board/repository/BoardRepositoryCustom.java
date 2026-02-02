@@ -7,4 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface BoardRepositoryCustom {
     Page<Board> findCommunityListWithFilters(Pageable pageable, BoardCode boardCode, String search, String sort);
+
+    Page<Board> searchBoards(BoardCode boardCode, String keyword, Pageable pageable, String sort);
+
 }

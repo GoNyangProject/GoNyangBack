@@ -30,12 +30,12 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public BoardResultDTO getBoards(BoardCode boardCode, String searchKeyword, int size, int page) {
+    public BoardResultDTO getBoards(BoardCode boardCode, String searchKeyword, int size, int page, String sort) {
         BoardResultDTO result = new BoardResultDTO();
 
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by("id").ascending());
 
-        Page<Board> boardPage = boardRepository.searchBoards(boardCode, searchKeyword, pageable);
+        Page<Board> boardPage = boardRepository.searchBoards(boardCode, searchKeyword, pageable, sort);
         List<BoardResponseDTO> response = boardPage.getContent().stream().map(board -> {
             BoardResponseDTO boardResponseDTO = new BoardResponseDTO();
             boardResponseDTO.setId(board.getId());

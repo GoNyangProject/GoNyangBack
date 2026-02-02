@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -44,11 +45,12 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         Long total = queryFactory
                 .select(board.count())
                 .from(board)
-                .where(boardCodeEq(boardCode),searchKeywordLike(search))
+                .where(boardCodeEq(boardCode), searchKeywordLike(search))
                 .fetchOne();
 
         return new PageImpl<>(content, pageable, total != null ? total : 0L);
     }
+
     private BooleanExpression searchKeywordLike(String keyword) {
         if (keyword == null || keyword.trim().isEmpty()) {
             return null;
@@ -57,12 +59,12 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .or(board.content.containsIgnoreCase(keyword))
                 .or(member.userId.containsIgnoreCase(keyword));
     }
+
     private OrderSpecifier<?> getSortOrder(String sort) {
         if (sort == null) return board.createdAt.desc();
 
         return switch (sort) {
-            case "views" ->
-                    board.viewCount.desc();
+            case "views" -> board.viewCount.desc();
             case "likes" -> board.likeCount.desc();
             default -> board.createdAt.desc();
         };
@@ -83,4 +85,33 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         }
         return null;
     }
+
+    @Override
+    public Page<Board> searchBoards(BoardCode boardCode, String keyword, Pageable pageable,String sort) {
+
+        List<Board> content = queryFactory
+                .selectFrom(board)
+                .where(boardCodeEq(boardCode),
+                        searchKeywordContains(keyword))
+                .orderBy(getSortOrder(sort))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long total = queryFactory
+                .select(board.count())
+                .from(board)
+                .where(boardCodeEq(boardCode), searchKeywordContains(keyword))
+                .fetchOne();
+
+        return new PageImpl<>(content, pageable, total != null ? total : 0L);
+    }
+
+    private BooleanExpression searchKeywordContains(String keyword) {
+        return StringUtils.hasText(keyword) ?
+                board.title.containsIgnoreCase(keyword)
+                        .or(board.content.containsIgnoreCase(keyword)) : null;
+    }
+
+
 }

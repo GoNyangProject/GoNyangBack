@@ -6,7 +6,7 @@ import com.example.tossback.board.enums.BoardCode;
 
 public interface BoardService {
 
-    BoardResultDTO getBoards(BoardCode boardCode, String searchKeyword, int size, int page);
+    BoardResultDTO getBoards(BoardCode boardCode, String searchKeyword, int size, int page, String sort);
 
     BoardResponseDTO getBoardDetail(long boardCode, String userId);
 
