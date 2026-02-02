@@ -59,15 +59,16 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
 
 
     @Override
-    public Page<Board> findAdminBoardList(Pageable pageable, String search, String status) {
+    public Page<Board> findAdminBoardList(Pageable pageable, String search, String status, String category, String sort) {
         List<Board> content = queryFactory
                 .selectFrom(board)
                 .leftJoin(board.member, member).fetchJoin()
                 .where(
                         searchKeywordLike(search),
-                        statusEq(status)
+                        statusEq(status),
+                        categoryEq(category)
                 )
-                .orderBy(board.createdAt.desc())
+                .orderBy(getAdminSortOrder(sort))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -78,16 +79,23 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .leftJoin(board.member, member)
                 .where(
                         searchKeywordLike(search),
-                        statusEq(status)
+                        statusEq(status),
+                        categoryEq(category)
                 )
                 .fetchOne();
 
         return new PageImpl<>(content, pageable, total != null ? total : 0L);
     }
+    private BooleanExpression categoryEq(String category) {
+        if (!StringUtils.hasText(category)) {
+            return null;
+        }
+        return board.boardType.boardCode.eq(BoardCode.valueOf(category));
+    }
 
     private BooleanExpression statusEq(String status) {
         if (status == null || status.isEmpty()) {
-            return null; // '전체 상태'일 때는 조건을 걸지 않음
+            return null;
         }
         if ("DELETED".equals(status)) {
             return board.deletedAt.isNotNull(); // 삭제된 글만 보기
@@ -105,6 +113,17 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         return board.title.containsIgnoreCase(keyword)
                 .or(board.content.containsIgnoreCase(keyword))
                 .or(member.userId.containsIgnoreCase(keyword));
+    }
+    private OrderSpecifier<?> getAdminSortOrder(String sort) {
+        if (!StringUtils.hasText(sort)) return board.createdAt.desc();
+
+        return switch (sort) {
+            case "viewCount,desc" -> board.viewCount.desc();
+            case "likeCount,desc" -> board.likeCount.desc();
+            case "createdAt,asc" -> board.createdAt.asc();
+            case "createdAt,desc" -> board.createdAt.desc();
+            default -> board.createdAt.desc();
+        };
     }
 
     private OrderSpecifier<?> getSortOrder(String sort) {

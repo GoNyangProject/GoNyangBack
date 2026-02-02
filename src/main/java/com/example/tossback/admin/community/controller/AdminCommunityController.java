@@ -17,11 +17,16 @@ public class AdminCommunityController {
     private final AdminCommunityService adminCommunityService;
 
     @GetMapping("/list")
-    public ResponseEntity<CommonResponse> getCommunityList(@RequestParam(required = false) String search,
-                                                           @RequestParam(required = false) String status,
-                                                           @RequestParam(defaultValue = "0") int page,
-                                                           @RequestParam(defaultValue = "10") int size) {
-        return new ResponseEntity<>(new CommonResponse(adminCommunityService.getCommunityList(search,status,page,size
-        )), HttpStatus.OK);
+    public ResponseEntity<CommonResponse> getCommunityList(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String sort,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        return new ResponseEntity<>(new CommonResponse(
+                adminCommunityService.getCommunityList(search, status, category, sort, page, size)
+        ), HttpStatus.OK);
     }
 }

@@ -20,6 +20,15 @@ public class MemberResponseDTO {
         dto.setUserId(member.getUserId());
         dto.setUsername(member.getUsername());
         dto.setRole(member.getUserRoleType().name());
+        if (member.getPetInfoList() != null) {
+            String path = member.getPetInfoList().stream()
+                    .filter(pet -> pet != null && pet.getDeletedAt() == null)
+                    .map(pet -> pet.getPetImagePath())
+                    .filter(java.util.Objects::nonNull)
+                    .findFirst()
+                    .orElse(null);
+            dto.setPetImagePath(path);
+        }
         return dto;
     }
 }

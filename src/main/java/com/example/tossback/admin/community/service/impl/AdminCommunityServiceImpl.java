@@ -24,10 +24,10 @@ public class AdminCommunityServiceImpl implements AdminCommunityService {
 
     @Override
     @Transactional(readOnly = true)
-    public AdminCommunityListResponseDTO getCommunityList(String search, String status, int page, int size) {
+    public AdminCommunityListResponseDTO getCommunityList(String search, String status, String category, String sort, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
 
-        Page<Board> boardPage = boardRepository.findAdminBoardList(pageable, search, status);
+        Page<Board> boardPage = boardRepository.findAdminBoardList(pageable, search, status, category, sort);
 
         List<CommunityInfo> dtoList = boardPage.getContent().stream()
                 .map(board -> CommunityInfo.builder()

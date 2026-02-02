@@ -10,5 +10,6 @@ public interface BoardRepository extends JpaRepository<Board, Long>, BoardReposi
 
     Board findById(@Param("boardCode") long boardCode);
 
+//    Board findByBoardType_BoardCode(BoardCode boardCode);
     Optional<Board> findBoardById(Long id);
 }
