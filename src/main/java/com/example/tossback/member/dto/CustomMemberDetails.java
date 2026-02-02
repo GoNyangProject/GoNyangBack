@@ -24,14 +24,19 @@ public class CustomMemberDetails implements UserDetails {
         if (member.getUserRoleType() != null) {
             collection.add(new SimpleGrantedAuthority(member.getUserRoleType().name()));
         }
-//        collection.add(new GrantedAuthority() {
-//            @Override
-//            public String getAuthority() {
-//                return member.getUserRoleType().toString();
-//            }
-//        });
-
         return collection;
+    }
+    public String getPetImagePath() {
+        if (member.getPetInfoList() == null || member.getPetInfoList().isEmpty()) {
+            return null;
+        }
+
+        return member.getPetInfoList().stream()
+                .filter(pet -> pet != null && pet.getDeletedAt() == null)
+                .map(pet -> pet.getPetImagePath())
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(null);
     }
 
     public long getMemberId() {

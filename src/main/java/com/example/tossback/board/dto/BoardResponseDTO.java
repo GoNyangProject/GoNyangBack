@@ -22,6 +22,8 @@ public class BoardResponseDTO {
     private String userId;
     private MemberResponseDTO member;
     private BoardCode boardCode;
+    private boolean isLiked;
+    private boolean canDelete;
 
     public static BoardResponseDTO fromEntity(Board board) {
         BoardResponseDTO dto = new BoardResponseDTO();

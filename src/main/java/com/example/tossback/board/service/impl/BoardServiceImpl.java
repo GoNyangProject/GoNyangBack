@@ -1,21 +1,28 @@
 package com.example.tossback.board.service.impl;
 
+import com.example.tossback.board.boardLike.repository.BoardLikeRepository;
+import com.example.tossback.board.dto.BoardRequestDTO;
 import com.example.tossback.board.dto.BoardResponseDTO;
 import com.example.tossback.board.dto.BoardResultDTO;
 import com.example.tossback.board.entity.Board;
 import com.example.tossback.board.enums.BoardCode;
 import com.example.tossback.board.repository.BoardRepository;
 import com.example.tossback.board.service.BoardService;
+import com.example.tossback.common.enums.ErrorCode;
+import com.example.tossback.common.exception.CommonException;
 import com.example.tossback.config.redis.util.RedisUtil;
 import com.example.tossback.member.dto.MemberResponseDTO;
 import com.example.tossback.member.entity.Member;
+import com.example.tossback.member.repository.MemberRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -23,10 +30,14 @@ public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
     private final RedisUtil redisUtil;
+    private final MemberRepository memberRepository;
+    private final BoardLikeRepository boardLikeRepository;
 
-    public BoardServiceImpl(BoardRepository boardRepository, RedisUtil redisUtil) {
+    public BoardServiceImpl(BoardRepository boardRepository, RedisUtil redisUtil, MemberRepository memberRepository, BoardLikeRepository boardLikeRepository) {
         this.boardRepository = boardRepository;
         this.redisUtil = redisUtil;
+        this.memberRepository = memberRepository;
+        this.boardLikeRepository = boardLikeRepository;
     }
 
     @Override
@@ -63,6 +74,19 @@ public class BoardServiceImpl implements BoardService {
             board.incrementViewCount();
             redisUtil.setDataExpire(redisKey, "visited", 86400);
         }
+        boolean isLiked = false;
+        boolean canDelete = false;
+        if (userId != null && !userId.equals("anonymousUser")) {
+            Member currentId = memberRepository.findByUserId(userId);
+            if (currentId != null) {
+                isLiked = boardLikeRepository.existsByBoardAndMember(board, currentId);
+                if (currentId.getUserRoleType().name().equals("ROLE_ADMIN") ||
+                        board.getMember().getUserId().equals(currentId.getUserId())) {
+                    canDelete = true;
+                }
+            }
+        }
+
         Member member = board.getMember();
         MemberResponseDTO memberResponseDTO = MemberResponseDTO.from(member);
         result.setId(board.getId());
@@ -74,6 +98,8 @@ public class BoardServiceImpl implements BoardService {
         result.setImgUrl(board.getImgUrl());
         result.setMember(memberResponseDTO);
         result.setBoardCode(board.getBoardType().getBoardCode());
+        result.setLiked(isLiked);
+        result.setCanDelete(canDelete);
         return result;
     }
 
@@ -91,5 +117,25 @@ public class BoardServiceImpl implements BoardService {
         result.setLikeCount(board.getLikeCount());
         result.setViewCount(board.getViewCount());
         return result;
+    }
+
+    @Transactional
+    @Override
+    public Boolean deleteBoard(BoardRequestDTO boardRequestDTO) {
+        Board board = boardRepository.findBoardById(boardRequestDTO.getBoardId())
+                .orElseThrow(() -> new CommonException("게시판 찾기 실패",ErrorCode.NOT_FOUND_DATA));
+        String currentUserId = SecurityContextHolder.getContext().getAuthentication().getName();
+        Member currentUser = memberRepository.findByUserId(currentUserId);
+        boolean isAdmin = currentUser.getUserRoleType().name().equals("ROLE_ADMIN");
+        boolean isAuthor = board.getMember().getUserId().equals(currentUser.getUserId());
+        if (!isAdmin && !isAuthor) {
+            throw new CommonException("삭제 권한이 없습니다.", ErrorCode.UNAUTHORIZED_ACCESS);
+        }
+        try {
+             board.setDeletedAt(LocalDateTime.now());
+            return true;
+        } catch (Exception e) {
+            throw new CommonException("삭제 중 오류가 발생했습니다.", ErrorCode.INTERNAL_SERVER_ERROR);
+        }
     }
 }
