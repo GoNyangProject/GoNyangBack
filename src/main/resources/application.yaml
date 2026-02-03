@@ -4,7 +4,7 @@ spring:
     ansi:
       enabled: always
   application:
-    name: tossBack
+    name: goNyangBack
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
   servlet:
@@ -36,7 +36,7 @@ logging:
 
 
 # security 관련
-secret-key: 33D3AFA30260B16223DB5995202F35B1AFDB14B2FB8AE60D7CF79CD402F52D0769742896041858C6C9D632E2346E48CC98ECDE7B2E31B1F8624C223B6BFC15DD
+secret-key: ${JWT_SECRET_KEY}
 access-expiration-hours: 6
 refresh-expiration-hours: 240
 
@@ -48,8 +48,8 @@ spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://${MARIA_HOST:maria-db}:${MARIA_PORT:3306}/goNyangProject?allowPublicKeyRetrieval=true&useSSL=false
-    username: root
-    password: WB12345!@
+    username: ${MARIA_USERNAME}
+    password: ${MARIA_PASSWORD}
   jpa:
     generate-ddl: true
     show-sql: true
@@ -60,6 +60,13 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.MariaDBDialect
     open-in-view: false
+  data:
+    redis:
+      host: ${REDIS_HOST:127.0.0.1}
+      port: ${REDIS_PORT:6379}
+  file:
+    storage:
+      path: ${FILE_STORAGE_PATH:/uploads/}
   app:
     frontend:
       login-success-uri: ${APP_FRONTEND_LOGIN_SUCCESS_URI}
@@ -75,8 +82,8 @@ spring:
       on-profile: local
   datasource:
     url: jdbc:mariadb://${MARIA_HOST:localhost}:${MARIA_PORT:3306}/goNyangProject?allowPublicKeyRetrieval=true&useSSL=false
-    username: root
-    password: WB12345!@
+    username: ${MARIA_USERNAME}
+    password: ${MARIA_PASSWORD}
     driver-class-name: org.mariadb.jdbc.Driver
 
   jpa:
