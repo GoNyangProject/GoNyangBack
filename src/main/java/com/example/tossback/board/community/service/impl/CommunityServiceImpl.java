@@ -1,17 +1,18 @@
 package com.example.tossback.board.community.service.impl;
 
+import com.example.tossback.board.community.dto.CommunityListResponse;
+import com.example.tossback.board.community.dto.CommunitySaveRequest;
+import com.example.tossback.board.community.dto.FileUploadResponseDto;
+import com.example.tossback.board.community.service.CommunityService;
 import com.example.tossback.board.dto.BoardResponseDTO;
 import com.example.tossback.board.entity.Board;
 import com.example.tossback.board.entity.BoardType;
 import com.example.tossback.board.enums.BoardCode;
 import com.example.tossback.board.repository.BoardRepository;
 import com.example.tossback.board.repository.BoardTypeRepository;
-import com.example.tossback.board.community.dto.CommunityListResponse;
-import com.example.tossback.board.community.dto.CommunitySaveRequest;
-import com.example.tossback.board.community.dto.FileUploadResponseDto;
-import com.example.tossback.board.community.service.CommunityService;
 import com.example.tossback.member.entity.Member;
 import com.example.tossback.member.repository.MemberRepository;
+import io.awspring.cloud.s3.S3Template;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
@@ -37,8 +37,12 @@ public class CommunityServiceImpl implements CommunityService {
     private final BoardRepository boardRepository;
     private final BoardTypeRepository boardTypeRepository;
     private final MemberRepository memberRepository;
+    private final S3Template s3Template;
     @Value("${spring.file.storage.path}")
     private String storagePath;
+
+    @Value("${spring.cloud.aws.s3.bucket}")
+    private String S3BucketName;
 
     @Override
     public CommunityListResponse getCommunityList(int page, int size, BoardCode boardCode, String search, String sort) {
@@ -61,29 +65,39 @@ public class CommunityServiceImpl implements CommunityService {
 
     @Override
     public FileUploadResponseDto uploadFile(MultipartFile file) {
+
         if (file.isEmpty()) return null;
-
         try {
-            String categoryPath = "community/";
-            File directory = new File(storagePath, categoryPath);
-
-            if (!directory.exists()) {
-                directory.mkdirs();
-            }
-            String originalFilename = file.getOriginalFilename();
+            String S3Folder = "boardImg/";
             String uuid = UUID.randomUUID().toString();
-            String ext = extractExt(originalFilename);
-            String savedFileName = uuid + "." + ext;
-
-            File targetFile = new File(directory.getAbsolutePath(), savedFileName);
-
-            file.transferTo(targetFile);
-            String fileUrl = "http://localhost:8080/uploads/" + categoryPath + savedFileName;
+            String fileName = S3Folder + uuid + "." + extractExt(file.getOriginalFilename());
+            var resource = s3Template.upload(S3BucketName, fileName, file.getInputStream());
+            System.out.println("resource.getURL() = " + resource.getURL());
 
             return FileUploadResponseDto.builder()
-                    .src(fileUrl)
-                    .fileName(originalFilename)
+                    .src(resource.getURL().toString())
+                    .fileName(resource.getFilename())
                     .build();
+//            String categoryPath = "community/";
+//            File directory = new File(storagePath, categoryPath);
+//
+//            if (!directory.exists()) {
+//                directory.mkdirs();
+//            }
+//            String originalFilename = file.getOriginalFilename();
+//
+//            String ext = extractExt(originalFilename);
+//            String savedFileName = uuid + "." + ext;
+//
+//            File targetFile = new File(directory.getAbsolutePath(), savedFileName);
+//
+//            file.transferTo(targetFile);
+//            String fileUrl = "http://localhost:8080/uploads/" + categoryPath + savedFileName;
+//
+//            return FileUploadResponseDto.builder()
+//                    .src(fileUrl)
+//                    .fileName(originalFilename)
+//                    .build();
 
         } catch (IOException e) {
             e.printStackTrace();

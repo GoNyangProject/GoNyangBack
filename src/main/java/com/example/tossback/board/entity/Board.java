@@ -35,8 +35,6 @@ public class Board extends BaseEntity {
     @ColumnDefault("0")
     private int viewCount = 0;
 
-    private String imgUrl;
-
     public void incrementViewCount() {
         this.viewCount++;
     }

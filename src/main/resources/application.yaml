@@ -104,6 +104,15 @@ spring:
     frontend:
       login-success-uri: http://localhost:3000
       login-fail-uri: http://localhost:3000/member/login
+  cloud:
+    aws:
+      credentials:
+        access-key: ${AWS_ACCESS_KEY}
+        secret-key: ${AWS_SECRET_KEY}
+      region:
+        static: ap-northeast-2
+      s3:
+        bucket: ${AWS_BUCKET}
 logging:
   level:
     root: info
