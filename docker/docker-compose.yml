@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  app:
+    env_file:
+      - .env
+    image: ${IMAGE}:${TAG}
+    container_name: ${IMAGE}
+    ports:
+      - "${PORT}:8080"
+    restart: always
+
+    volumes:
+      - ./logs:/app/logs
+      - .${FILE_STORAGE_PATH}:${FILE_STORAGE_PATH}
+
+    networks:
+      - ${NETWORKS}
+
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+      MARIA_HOST: ${MARIA_HOST}
+      MARIA_PORT: ${MARIA_PORT}
+      MARIA_USERNAME: ${MARIA_USERNAME}
+      MARIA_PASSWORD: ${MARIA_PASSWORD}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      KAKAO_CLIENT_ID: ${KAKAO_CLIENT_ID}
+      KAKAO_CLIENT_SECRET: ${KAKAO_CLIENT_SECRET}
+      KAKAO_REDIRECT_URI: ${KAKAO_REDIRECT_URI}
+      NAVER_CLIENT_ID: ${NAVER_CLIENT_ID}
+      NAVER_CLIENT_SECRET: ${NAVER_CLIENT_SECRET}
+      NAVER_REDIRECT_URI: ${NAVER_REDIRECT_URI}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      GOOGLE_REDIRECT_URI: ${GOOGLE_REDIRECT_URI}
+      APP_FRONTEND_LOGIN_SUCCESS_URI: ${FRONTEND_SUCCESS_URI}
+      APP_FRONTEND_LOGIN_FAIL_URI: ${FRONTEND_FAIL_URI}
+      FILE_STORAGE_PATH: ${FILE_STORAGE_PATH}
+
+networks:
+  gonyang-network:
+    external: true
