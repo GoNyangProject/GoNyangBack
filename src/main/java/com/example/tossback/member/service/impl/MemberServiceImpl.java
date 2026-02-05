@@ -75,7 +75,7 @@ public class MemberServiceImpl implements MemberService {
 
         String userId = jwtUtil.getUserId(accessToken);
 
-        Member user = memberRepository.findByUserId(userId); // Member 반환
+        Member user = memberRepository.findByUserId(userId);
         if (user == null) return null;
 
         MemberResponseDTO memberResponseDTO = new MemberResponseDTO();
@@ -84,6 +84,11 @@ public class MemberServiceImpl implements MemberService {
         memberResponseDTO.setUserId(userId);
         memberResponseDTO.setRole(user.getUserRoleType().name());
         memberResponseDTO.setUserType(user.getUserRoleType().name());
+
+        if (user.getPetInfoList() != null && !user.getPetInfoList().isEmpty()) {
+            String imagePath = user.getPetInfoList().get(0).getPetImagePath();
+            memberResponseDTO.setPetImagePath(imagePath);
+        }
 
         return memberResponseDTO;
     }

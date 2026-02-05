@@ -6,14 +6,15 @@ import com.example.tossback.mypage.accountInfo.dto.*;
 import com.example.tossback.mypage.accountInfo.entity.PetInfo;
 import com.example.tossback.mypage.accountInfo.repository.PetInfoRepository;
 import com.example.tossback.mypage.accountInfo.service.AccountInfoService;
+import io.awspring.cloud.s3.S3Template;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.List;
@@ -25,14 +26,20 @@ public class AccountInfoServiceImpl implements AccountInfoService {
 
     private final MemberRepository memberRepository;
     private final PetInfoRepository petInfoRepository;
+    private final S3Template s3Template;
 
-    public AccountInfoServiceImpl(MemberRepository memberRepository, PetInfoRepository petInfoRepository) {
+    public AccountInfoServiceImpl(MemberRepository memberRepository, PetInfoRepository petInfoRepository, S3Template s3Template) {
         this.memberRepository = memberRepository;
         this.petInfoRepository = petInfoRepository;
+        this.s3Template = s3Template;
     }
 
     @Value("${spring.file.storage.path}")
     private String storagePath;
+
+    @Value("${spring.cloud.aws.s3.bucket}")
+    private String S3_BUCKET;
+
 
     @Override
     public UserAndPetInfoResponse getUserAndPetInfo(String userId) {
@@ -109,10 +116,11 @@ public class AccountInfoServiceImpl implements AccountInfoService {
         }
 
         String imageBase64 = myPetProfileModify.getImageBase64();
-
+        String finalPath = null;
         if (imageBase64 != null && !imageBase64.isBlank()) {
             if (imageBase64.startsWith("data:image")) {
-                petInfo.setPetImagePath(saveImage(imageBase64));
+                finalPath = saveImageToS3(imageBase64);
+                petInfo.setPetImagePath(finalPath);
             } else if (imageBase64.startsWith("/")) {
                 petInfo.setPetImagePath(imageBase64);
             } else {
@@ -134,6 +142,7 @@ public class AccountInfoServiceImpl implements AccountInfoService {
 
         MyPetProfileModifyResponse response = new MyPetProfileModifyResponse();
         response.setStatus("ok");
+        response.setPetImagePath(finalPath);
         return response;
     }
 
@@ -159,21 +168,22 @@ public class AccountInfoServiceImpl implements AccountInfoService {
         return response;
     }
 
+    private String saveImageToS3(String base64Data) {
+        String S3Folder = "mypage/";
+        String[] parts = base64Data.split(",");
+        String metadata = parts[0];
+        String content = parts[1];
 
+        String extension = metadata.split("/")[1].split(";")[0];
+        byte[] decodedBytes = Base64.getDecoder().decode(content);
 
-    public String saveImage(String base64) {
-        try {
-            String fileName = "petThumbnail" + UUID.randomUUID() + ".jpg";
-            String filePath = Paths.get(storagePath, fileName).toString();
+        String fileName = S3Folder + UUID.randomUUID() + "." + extension;
 
-            Files.createDirectories(Paths.get(storagePath));
-            byte[] bytes = Base64.getDecoder().decode(base64.split(",")[1]);
-            Files.write(Paths.get(filePath), bytes);
-
-            return filePath;
+        try (InputStream inputStream = new ByteArrayInputStream(decodedBytes)) {
+            var resource = s3Template.upload(S3_BUCKET, fileName, inputStream);
+            return resource.getURL().toString();
         } catch (IOException e) {
-            log.error("이미지 못찾겠음 {}", e.getMessage());
-            throw new RuntimeException("이미지 못찾겠음");
+            throw new RuntimeException("S3 업로드 중 에러 발생", e);
         }
     }
 }

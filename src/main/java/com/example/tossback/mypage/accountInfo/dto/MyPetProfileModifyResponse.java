@@ -7,4 +7,5 @@ import lombok.Setter;
 @Setter
 public class MyPetProfileModifyResponse {
     private String status;
+    private String petImagePath;
 }

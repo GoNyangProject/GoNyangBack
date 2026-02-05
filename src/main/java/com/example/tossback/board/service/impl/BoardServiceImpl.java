@@ -54,7 +54,6 @@ public class BoardServiceImpl implements BoardService {
             boardResponseDTO.setCreatedAt(board.getCreatedAt());
             boardResponseDTO.setViewCount(board.getViewCount());
             boardResponseDTO.setLikeCount(board.getLikeCount());
-            boardResponseDTO.setImgUrl(board.getImgUrl());
             return boardResponseDTO;
         }).toList();
         result.setBoards(response);
@@ -95,7 +94,6 @@ public class BoardServiceImpl implements BoardService {
         result.setCreatedAt(board.getCreatedAt());
         result.setLikeCount(board.getLikeCount());
         result.setViewCount(board.getViewCount());
-        result.setImgUrl(board.getImgUrl());
         result.setMember(memberResponseDTO);
         result.setBoardCode(board.getBoardType().getBoardCode());
         result.setLiked(isLiked);
