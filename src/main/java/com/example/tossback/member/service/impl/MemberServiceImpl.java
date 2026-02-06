@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -66,7 +67,7 @@ public class MemberServiceImpl implements MemberService {
         boolean exists = memberRepository.existsByUserId(id);
         return new CheckId(!exists);
     }
-
+    @Transactional(readOnly = true)
     @Override
     public MemberResponseDTO getCurrentUser(String accessToken) {
         if (accessToken == null || !jwtUtil.validateToken(accessToken)) {
@@ -75,7 +76,8 @@ public class MemberServiceImpl implements MemberService {
 
         String userId = jwtUtil.getUserId(accessToken);
 
-        Member user = memberRepository.findByUserId(userId);
+        Member user = memberRepository.findWithPetInfosByUserId(userId)
+                .orElse(null);
         if (user == null) return null;
 
         MemberResponseDTO memberResponseDTO = new MemberResponseDTO();

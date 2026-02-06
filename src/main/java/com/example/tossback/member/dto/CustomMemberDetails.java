@@ -27,16 +27,17 @@ public class CustomMemberDetails implements UserDetails {
         return collection;
     }
     public String getPetImagePath() {
-        if (member.getPetInfoList() == null || member.getPetInfoList().isEmpty()) {
-            return null;
-        }
-
-        return member.getPetInfoList().stream()
-                .filter(pet -> pet != null && pet.getDeletedAt() == null)
-                .map(pet -> pet.getPetImagePath())
-                .filter(Objects::nonNull)
-                .findFirst()
-                .orElse(null);
+//        if (member.getPetInfoList() == null || member.getPetInfoList().isEmpty()) {
+//            return null;
+//        }
+//
+//        return member.getPetInfoList().stream()
+//                .filter(pet -> pet != null && pet.getDeletedAt() == null)
+//                .map(pet -> pet.getPetImagePath())
+//                .filter(Objects::nonNull)
+//                .findFirst()
+//                .orElse(null);
+        return null;
     }
 
     public long getMemberId() {

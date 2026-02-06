@@ -10,9 +10,11 @@ import com.example.tossback.board.repository.BoardRepository;
 import com.example.tossback.member.entity.Member;
 import com.example.tossback.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -27,6 +29,7 @@ public class CommentServiceImpl implements CommentService {
         this.boardRepository = boardRepository;
     }
 
+    @Transactional
     @Override
     public CommentResponseDTO createComment(CommentRequestDTO commentRequestDTO) {
         Comment parent = commentRepository.findById(commentRequestDTO.getParentId());
@@ -43,6 +46,7 @@ public class CommentServiceImpl implements CommentService {
         return null;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<CommentResponseDTO> getComment(long boardId) {
         List<Comment> rootComments = commentRepository.findByBoardIdAndParentIsNull(boardId);
@@ -51,7 +55,7 @@ public class CommentServiceImpl implements CommentService {
                 .map(CommentResponseDTO::from)
                 .collect(Collectors.toList());
     }
-
+    @Transactional
     @Override
     public boolean deleteComment(long commentId) {
         Comment comment = commentRepository.findById(commentId);

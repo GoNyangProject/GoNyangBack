@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  app:
+  gonyang-back-app:
     env_file:
       - .env
     image: ${IMAGE}:${TAG}
@@ -38,7 +38,9 @@ services:
       APP_FRONTEND_LOGIN_SUCCESS_URI: ${FRONTEND_SUCCESS_URI}
       APP_FRONTEND_LOGIN_FAIL_URI: ${FRONTEND_FAIL_URI}
       FILE_STORAGE_PATH: ${FILE_STORAGE_PATH}
-
+      AWS_ACCESS_KEY: ${AWS_ACCESS_KEY}
+      AWS_SECRET_KEY: ${AWS_SECRET_KEY}
+      AWS_BUCKET: ${AWS_BUCKET}
 networks:
   gonyang-network:
     external: true

@@ -65,21 +65,28 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @Transactional
     public BoardResponseDTO getBoardDetail(long boardCode, String userId) {
-        BoardResponseDTO result = new BoardResponseDTO();
+
         Board board = boardRepository.findById(boardCode);
+
+        if (board == null) {
+            throw new IllegalArgumentException("존재하지 않는 게시글입니다. ID: " + boardCode);
+        }
+
         String redisKey = "view:board:" + boardCode + ":user:" + userId;
         String isViewed = redisUtil.getData(redisKey);
         if (isViewed == null) {
             board.incrementViewCount();
             redisUtil.setDataExpire(redisKey, "visited", 86400);
         }
+
         boolean isLiked = false;
         boolean canDelete = false;
+
         if (userId != null && !userId.equals("anonymousUser")) {
             Member currentId = memberRepository.findByUserId(userId);
             if (currentId != null) {
                 isLiked = boardLikeRepository.existsByBoardAndMember(board, currentId);
-                if (currentId.getUserRoleType().name().equals("ROLE_ADMIN") ||
+                if ("ROLE_ADMIN".equals(currentId.getUserRoleType().name()) ||
                         board.getMember().getUserId().equals(currentId.getUserId())) {
                     canDelete = true;
                 }
@@ -88,6 +95,8 @@ public class BoardServiceImpl implements BoardService {
 
         Member member = board.getMember();
         MemberResponseDTO memberResponseDTO = MemberResponseDTO.from(member);
+
+        BoardResponseDTO result = new BoardResponseDTO();
         result.setId(board.getId());
         result.setTitle(board.getTitle());
         result.setContent(board.getContent());
@@ -98,6 +107,7 @@ public class BoardServiceImpl implements BoardService {
         result.setBoardCode(board.getBoardType().getBoardCode());
         result.setLiked(isLiked);
         result.setCanDelete(canDelete);
+
         return result;
     }
 

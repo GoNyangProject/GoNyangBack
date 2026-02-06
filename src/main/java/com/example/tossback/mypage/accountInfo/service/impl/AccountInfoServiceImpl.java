@@ -7,10 +7,10 @@ import com.example.tossback.mypage.accountInfo.entity.PetInfo;
 import com.example.tossback.mypage.accountInfo.repository.PetInfoRepository;
 import com.example.tossback.mypage.accountInfo.service.AccountInfoService;
 import io.awspring.cloud.s3.S3Template;
-import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -40,7 +40,7 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     @Value("${spring.cloud.aws.s3.bucket}")
     private String S3_BUCKET;
 
-
+    @Transactional(readOnly = true)
     @Override
     public UserAndPetInfoResponse getUserAndPetInfo(String userId) {
         Member memberInfo = memberRepository.findByUserId(userId);
