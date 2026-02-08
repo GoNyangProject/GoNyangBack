@@ -35,6 +35,10 @@ public class OAuthController {
     private String googleClientId;
     @Value("${google.redirect-uri}")
     private String googleRedirectUri;
+    @Value("${spring.app.cookie.secure}")
+    private boolean isSecure;
+    @Value("${spring.app.cookie.same-site}")
+    private String sameSite;
 
 
     @GetMapping("/kakao")
@@ -71,10 +75,6 @@ public class OAuthController {
 
         response.sendRedirect(googleAuthUrl);
     }
-    //    @GetMapping("/{provider}")
-//    public void redirect(@PathVariable String provider, HttpServletResponse response) throws IOException {
-//        response.sendRedirect(oAuthService.getRedirectUrl(provider));
-//    }
 
     @GetMapping("/kakao/callback")
     public void kakaoLogin(
@@ -149,21 +149,21 @@ public class OAuthController {
 //    }
 
 
-    private static void setAuthCookies(HttpServletResponse response, OAuthLoginResult result) {
+    private void setAuthCookies(HttpServletResponse response, OAuthLoginResult result) {
         ResponseCookie accessCookie = ResponseCookie.from("accessToken", result.getAccessToken())
                 .httpOnly(false)
-                .secure(false)
+                .secure(isSecure)
                 .path("/")
                 .maxAge(60 * 60)
-                .sameSite("Lax")
+                .sameSite(sameSite)
                 .build();
 
         ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", result.getRefreshToken())
                 .httpOnly(true)
-                .secure(false)
+                .secure(isSecure)
                 .path("/")
                 .maxAge(60 * 60 * 24 * 14)
-                .sameSite("Lax")
+                .sameSite(sameSite)
                 .build();
 
         response.addHeader("Set-Cookie", accessCookie.toString());

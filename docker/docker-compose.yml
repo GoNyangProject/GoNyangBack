@@ -6,8 +6,6 @@ services:
       - .env
     image: ${IMAGE}:${TAG}
     container_name: ${IMAGE}
-    ports:
-      - "${PORT}:8080"
     restart: always
 
     volumes:

@@ -19,11 +19,12 @@ import com.example.tossback.member.enums.AuthProvider;
 import com.example.tossback.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
 @Service
-
+@Transactional
 public class OAuthService {
 
     private final KakaoOAuthClient kakaoOAuthClient;

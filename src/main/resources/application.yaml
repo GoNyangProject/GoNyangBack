@@ -1,4 +1,7 @@
 # 공통
+server:
+  servlet:
+    context-path: /api
 spring:
   output:
     ansi:
@@ -48,7 +51,6 @@ logging:
 secret-key: ${JWT_SECRET_KEY}
 access-expiration-hours: 6
 refresh-expiration-hours: 240
-
 --- # 운영
 spring:
   config:
@@ -56,7 +58,7 @@ spring:
       on-profile: product
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://${MARIA_HOST:maria-db}:${MARIA_PORT:3306}/goNyangProject?allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:mariadb://${MARIA_HOST:maria-db}:${MARIA_PORT:3306}/gonyangproject?allowPublicKeyRetrieval=true&useSSL=false
     username: ${MARIA_USERNAME}
     password: ${MARIA_PASSWORD}
   jpa:
@@ -80,6 +82,9 @@ spring:
     frontend:
       login-success-uri: ${APP_FRONTEND_LOGIN_SUCCESS_URI}
       login-fail-uri: ${APP_FRONTEND_LOGIN_FAIL_URI}
+    cookie:
+      secure: true
+      same-site: None
 logging:
   level:
     root: info
@@ -114,6 +119,9 @@ spring:
     frontend:
       login-success-uri: http://localhost:3000
       login-fail-uri: http://localhost:3000/member/login
+    cookie:
+      secure: false
+      same-site: Lax
   cloud:
     aws:
       credentials:

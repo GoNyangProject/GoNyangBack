@@ -9,6 +9,8 @@ import com.example.tossback.board.entity.Board;
 import com.example.tossback.board.repository.BoardRepository;
 import com.example.tossback.member.entity.Member;
 import com.example.tossback.member.repository.MemberRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,11 +61,16 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public boolean deleteComment(long commentId) {
         Comment comment = commentRepository.findById(commentId);
-        if (comment != null) {
-            commentRepository.deleteById(commentId);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserName = auth.getName();
+        boolean isAdmin = auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        boolean isOwner = comment.getMember().getUserId().equals(currentUserName);
+        if (isOwner || isAdmin) {
+            commentRepository.delete(comment);
+            return true;
         } else {
             return false;
         }
-        return true;
     }
 }
