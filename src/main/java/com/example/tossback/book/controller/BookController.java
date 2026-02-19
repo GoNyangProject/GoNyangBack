@@ -27,6 +27,7 @@ public class BookController {
 
     @PostMapping("/cancel")
     public ResponseEntity<CommonResponse> cancelBook(@RequestBody BookRequestDTO bookRequestDTO) {
+        System.out.println(bookRequestDTO);
         return new ResponseEntity<>(new CommonResponse(bookService.cancelBook(bookRequestDTO.getOrderId())), HttpStatus.OK);
     }
 
