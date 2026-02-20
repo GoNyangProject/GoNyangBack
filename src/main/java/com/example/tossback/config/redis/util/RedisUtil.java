@@ -98,4 +98,30 @@ public class RedisUtil {
         Long expire = redisTemplate.getExpire(key, TimeUnit.SECONDS);
         return (expire != null && expire > 0) ? expire : 0;
     }
+    //하이퍼로그로그(통계용)
+    public void addHyperLogLog(String key, String value) {
+        redisTemplate.opsForHyperLogLog().add(key, value);
+    }
+
+    public long getHyperLogLogCount(String key) {
+        return redisTemplate.opsForHyperLogLog().size(key);
+    }
+    //해쉬
+    public void putHash(String key, String field, String value) {
+        redisTemplate.opsForHash().put(key, field, value);
+    }
+    public void addZSet(String key, String value, double score) {
+        redisTemplate.opsForZSet().add(key, value, score);
+    }
+    //sorted set
+    public Set<String> getTopRank(String key, int start, int end) {
+        return redisTemplate.opsForZSet().reverseRange(key, start, end);
+    }
+    //list
+    public void pushList(String key, String value) {
+        redisTemplate.opsForList().rightPush(key, value);
+    }
+    public List<String> getList(String key) {
+        return redisTemplate.opsForList().range(key, 0, -1);
+    }
 }
