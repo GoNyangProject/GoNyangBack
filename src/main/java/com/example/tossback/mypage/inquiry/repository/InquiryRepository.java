@@ -1,6 +1,7 @@
 package com.example.tossback.mypage.inquiry.repository;
 
 import com.example.tossback.mypage.inquiry.entity.Inquiry;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,4 +19,7 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Long>, Inquiry
         WHERE i.inquiryNumber LIKE :prefix%
     """)
     String findLastInquiryNumberByPrefix(@Param("prefix") String prefix);
+
+    @Query("SELECT i FROM Inquiry i WHERE i.userId = :userId ORDER BY i.createdAt DESC")
+    List<Inquiry> findMyInquiries(@Param("userId") String userId, Pageable pageable);
 }
