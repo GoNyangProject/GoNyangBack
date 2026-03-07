@@ -50,14 +50,14 @@ public class InquiryServiceImpl implements InquiryService {
 
     @Override
     public InquiryDetailsResponse getInquiryDetails(InquiryDetailsRequest inquiryDetailsRequest) {
+
+        Inquiry inquiryDetail = inquiryRepository.findByInquiryNumber(inquiryDetailsRequest.getInquiryNumber());
+
+        if (inquiryDetail == null) {
+            log.warn("문의 정보를 찾을 수 없습니다. 문의 번호: {}", inquiryDetailsRequest.getInquiryNumber());
+            throw new RuntimeException("해당 문의를 찾을 수 없습니다.");
+        }
         try {
-            Inquiry inquiryDetail = inquiryRepository.findByInquiryNumber(inquiryDetailsRequest.getInquiryNumber());
-
-            if (inquiryDetail == null) {
-                log.warn("문의 정보를 찾을 수 없습니다. 문의 번호: {}", inquiryDetailsRequest.getInquiryNumber());
-                throw new RuntimeException("해당 문의를 찾을 수 없습니다.");
-            }
-
             InquiryDetailsResponse dto = new InquiryDetailsResponse();
             dto.setTitle(inquiryDetail.getTitle());
             dto.setContent(inquiryDetail.getContent());
